@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+dist/
+build/
+*.log
+.gemini/
+.agents/
+brain/
+# Ignore browser recordings and screenshots if they are in the project root
+*.png
+*.webm
+*.mp4

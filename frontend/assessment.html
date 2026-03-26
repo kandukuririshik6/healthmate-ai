@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessment - HealthMate AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <span>⚕️</span> HealthMate AI
+        </a>
+        <nav>
+            <ul id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li class="user-only"><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <header class="assessment-header reveal">
+        <h1>Personal Health <span>Assessment</span></h1>
+        <p>Complete the form below for an AI-powered health risk analysis and personalized recommendations.</p>
+    </header>
+
+    <section class="assessment-container reveal delay-1">
+        <h1 class="section-title" style="margin-bottom: 1rem;">Health Assessment</h1>
+        <p style="text-align: center; color: var(--text-light); margin-bottom: 3rem;">Complete the following evaluation for a personalized health risk prediction.</p>
+
+        <form id="assessmentForm" class="card reveal delay-2">
+            <h2 class="form-title" style="margin-bottom: 2.5rem; color: var(--primary);">Current Symptoms</h2>
+            <div class="form-group checkbox-group" id="symptomsGroup">
+                <!-- Checkboxes for symptoms -->
+                <label class="checkbox-item"><input type="checkbox" value="headache"> Headache</label>
+                <label class="checkbox-item"><input type="checkbox" value="fever"> Fever</label>
+                <label class="checkbox-item"><input type="checkbox" value="fatigue"> Fatigue</label>
+                <label class="checkbox-item"><input type="checkbox" value="cough"> Cough</label>
+                <label class="checkbox-item"><input type="checkbox" value="body_pain"> Body Pain</label>
+                <label class="checkbox-item"><input type="checkbox" value="chest_pain"> Chest Pain</label>
+                <label class="checkbox-item"><input type="checkbox" value="shortness_breath"> Shortness of Breath</label>
+                <label class="checkbox-item"><input type="checkbox" value="nausea"> Nausea</label>
+                <label class="checkbox-item"><input type="checkbox" value="frequent_urination"> Frequent Urination</label>
+                <label class="checkbox-item"><input type="checkbox" value="increased_thirst"> Increased Thirst</label>
+            </div>
+
+            <h2 class="form-title" style="margin: 3rem 0 2.5rem; color: var(--primary);">Lifestyle Data</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="sleepHours">Sleep Duration (Hours)</label>
+                    <input type="number" id="sleepHours" class="form-control" required min="0" max="24" value="7">
+                </div>
+                <div class="form-group">
+                    <label for="exerciseMinutes">Physical Activity (Minutes)</label>
+                    <input type="number" id="exerciseMinutes" class="form-control" required min="0" value="30">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="waterIntake">Water Intake (Cups of 250ml)</label>
+                    <input type="number" id="waterIntake" class="form-control" required min="0" value="8">
+                </div>
+                <div class="form-group">
+                    <label for="stressLevel">Stress Level (1-10)</label>
+                    <input type="number" id="stressLevel" class="form-control" required min="1" max="10" value="3">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dietQuality">Diet Quality</label>
+                <select id="dietQuality" class="form-control" required>
+                    <option value="Good">Good (Balanced, Nutritious)</option>
+                    <option value="Average">Average (Mixed)</option>
+                    <option value="Poor">Poor (High Fast Food/Sugar)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem; font-size: 1.1rem; padding: 1rem;">Analyze & Predict Risk Assessment</button>
+        </form>
+
+        <div id="resultCard" class="card">
+            <h2 style="text-align: center; color: var(--text-dark);">Assessment Results</h2>
+            <div class="risk-level" id="riskLevelDisplay">Evaluating...</div>
+            <div style="background: rgba(46, 204, 113, 0.1); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem;">AI Analysis</h3>
+                <p id="explanationText" style="color: var(--text-dark);"></p>
+            </div>
+            <div>
+                <h3 style="color: var(--text-dark); margin-bottom: 1rem; font-size: 1.1rem;">Preventative Recommendations</h3>
+                <ul id="recommendationsList" style="padding-left: 1.5rem; color: var(--text-light); line-height: 1.8;">
+                </ul>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="dashboard.html" class="btn btn-outline">Go to Dashboard</a>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HealthMate AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <header>
+        <a href="index.html" class="logo">
+            <span>⚕️</span> HealthMate AI
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-container reveal">
+        <div class="form-wrapper card">
+            <div class="form-image-side" style="background-image: url('https://images.unsplash.com/photo-1551076805-e18690c5e53b?auto=format&fit=crop&q=80&w=1000');"></div>
+            <div class="form-container-side">
+                <h2 class="form-title">Welcome Back</h2>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem; margin-top:-1rem;">Login to access your dashboard</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" class="form-control" required placeholder="••••••••" style="padding-right: 45px;">
+                            <span class="password-toggle" onclick="togglePassword('password', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-light); font-size: 1.2rem; user-select: none;">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Login</button>
+                    <div class="form-footer">
+                        Don't have an account? <a href="register.html">Register here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
