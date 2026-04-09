@@ -19,7 +19,7 @@
             <ul id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                <li><a href="assessment.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">New Assessment</a></li>
+                <li><a href="assessment.html" class="btn btn-outline" style="padding: 0.5rem 1rem;"><span>New Assessment</span></a></li>
                 <li class="user-only"><a href="#" id="logoutBtn">Logout</a></li>
             </ul>
         </nav>
@@ -31,7 +31,7 @@
                 <div class="profile-avatar" id="profileInitials">U</div>
                 <h2 id="profileName" style="margin-bottom: 0.5rem; color: var(--primary);">User Name</h2>
                 <p id="profileEmail" style="color: var(--text-light); margin-bottom: 1rem;">user@example.com</p>
-                <div style="display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; margin-top: 1rem;">
                     <div>
                         <div style="font-size: 0.9rem; color: var(--text-light)">Age</div>
                         <strong id="profileAge">--</strong>
@@ -43,22 +43,28 @@
                 </div>
             </div>
             
-            <div class="card reveal delay-2" style="margin-top: 2rem;">
+            <div class="card reveal delay-2" style="margin-top: 1.2rem;">
                 <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">Current Status</h3>
                 <div id="dashboardRiskBadgeContainer">
                     <div class="risk-level" id="dashboardRiskLevel" style="font-size: 1.5rem; text-align: left; margin: 0;">No Data</div>
                 </div>
                 <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.8rem;">Based on latest assessment</p>
                 
-                <div style="margin-top: 2rem;">
-                    <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">Weekly Activity Trend</h4>
+                <div style="margin-top: 1.2rem;">
+                    <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        Daily Activity Trend
+                        <span id="activityTrendValue" class="trend-badge">--</span>
+                    </h4>
                     <div id="activityChart" class="health-chart">
                         <!-- Bars will be injected by JS -->
                     </div>
                 </div>
                 
-                <div style="margin-top: 2rem;">
-                    <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">Sleep Consistency</h4>
+                <div style="margin-top: 1.2rem;">
+                    <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        Sleep Consistency
+                        <span id="sleepConsistencyValue" class="trend-badge">--</span>
+                    </h4>
                     <div id="sleepChart" class="health-chart">
                         <!-- Bars will be injected by JS -->
                     </div>

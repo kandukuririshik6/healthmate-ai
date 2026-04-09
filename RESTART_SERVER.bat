@@ -6,3 +6,4 @@ cd backend
 echo Starting HealthMate AI Backend from backend directory...
 node server.js
 pause
+
