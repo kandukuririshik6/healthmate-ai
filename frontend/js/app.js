@@ -513,177 +513,175 @@ function initChatbot() {
 
         const intents = [
             {
-                keywords: ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening", "how are you", "what's up", "yo"],
+                keywords: ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening", "how are you", "what's up", "yo", "morning", "evening"],
                 responses: [
-                    "Hello! I am HealthMate AI, your dedicated wellness companion. How can I help you improve your life today?",
-                    "Hi there! I'm ready to dive into your health goals with you. What's on your mind?",
+                    "Hello! I am HealthMate AI, your dedicated wellness companion. How can I help you improve your lifestyle today?",
+                    "Hi there! I'm ready to dive into your health goals with you. What's on your mind today?",
                     "Greetings! I'm here to support your journey toward a healthier, more vibrant life. How are you feeling?",
-                    "Hi! It's a great day to work on your health. What can I assist you with right now?",
-                    "Hello! I'm HealthMate AI. Whether it's fitness, diet, or symptoms, I'm here to listen."
+                    "Hi! It's a great day to prioritize your wellness. What can I assist you with right now?",
+                    "Hello! I'm HealthMate AI. Whether it's nutrition, fitness, or general health queries, I'm here to provide science-backed insights."
                 ]
             },
             {
-                keywords: ["analyze", "risk", "check my status", "how am i doing", "evaluate", "am i healthy", "risk level", "analysis", "assessment result"],
+                keywords: ["analyze", "risk", "check my status", "how am i doing", "evaluate", "am i healthy", "risk level", "analysis", "assessment result", "score"],
                 responses: [
-                    "To analyze your risk, I look at your latest assessment data (sleep, exercise, stress, and symptoms). Take a 'New Assessment' if you haven't already, then check your Dashboard for the final score!",
-                    "I evaluate your health risk using a neural network model. Your risk level changes based on your daily habits. Have you completed today's assessment yet?",
-                    "You can see your real-time risk analysis on the Dashboard. If you're feeling a bit off, try taking a new assessment so I can update your status immediately.",
-                    "My analysis thrives on data. The more consistently you track your habits in the assessment section, the more accurately I can predict your health risks."
+                    "To analyze your risk accurately, I evaluate your latest assessment data including sleep, exercise, stress, and symptoms. If you haven't recently, please take a 'New Assessment' then check your Dashboard for your vitality score!",
+                    "I evaluate your health risk using a predictive neural network model. Your risk level is dynamic and changes based on your daily habits. Have you completed today's assessment yet?",
+                    "You can view your real-time risk analysis on the Dashboard. If you're feeling a bit off, I recommend taking a new assessment so I can update your status immediately with proactive advice.",
+                    "My analysis thrives on consistent data. The more frequently you track your habits in the assessment section, the more accurately I can predict your long-term health trends."
                 ]
             },
             {
-                keywords: ["who are you", "what is this", "about you", "what do you do", "introduce"],
+                keywords: ["who are you", "what is this", "about you", "what do you do", "introduce", "purpose"],
                 responses: [
-                    "I am HealthMate AI, an advanced wellness assistant designed to help you track habits, analyze symptoms, and predict health risks using science-backed patterns.",
-                    "Think of me as your 24/7 health companion. I can help you understand your body, stay motivated, and navigate your wellness journey with data-driven insights.",
-                    "I am a specialized AI engine built to empower you with proactive health advice. I analyze your assessments to give you a clear picture of your vitality.",
-                    "I'm here to bridge the gap between your health data and your daily habits. I provide tips, symptom analysis, and risk tracking to keep you at your best."
+                    "I am HealthMate AI, an advanced wellness assistant designed to help you track habits, analyze patterns, and predict health risks using science-backed data models.",
+                    "Think of me as your 24/7 health companion. I help you understand your body, stay motivated, and navigate your wellness journey with personalized, data-driven insights.",
+                    "I am a specialized AI engine built to empower you with proactive health suggestions. By analyzing your periodic assessments, I give you a clear, objective picture of your vitality.",
+                    "I'm here to bridge the gap between your daily habits and your long-term health goals. I focus on symptom analysis, risk tracking, and preventive lifestyle tips."
                 ]
             },
             {
-                keywords: ["doctor", "are you a doctor", "medical professional", "physician", "medical advice"],
+                keywords: ["doctor", "are you a doctor", "medical professional", "physician", "medical advice", "diagnosis", "expert"],
                 responses: [
-                    "No, I am an Artificial Intelligence, not a licensed medical professional. My advice is for educational and preventive purposes only. Always consult a doctor for diagnosis.",
-                    "I am an AI wellness assistant. While I can provide health suggestions based on data, I am not a substitute for professional medical advice, diagnosis, or treatment.",
-                    "Important: I do not provide medical diagnoses. My role is to help you track and understand wellness patterns. Please see a physician for any specific health concerns.",
-                    "I'm an AI, not a doctor. My responses are based on general health guidelines and your provided data. Always prioritize a consultation with a real medical expert."
+                    "**Crucial Disclaimer**: I am an Artificial Intelligence, not a licensed medical professional. My insights are for educational and preventive purposes only. Always consult a qualified physician for any medical diagnosis or treatment.",
+                    "I am an AI wellness assistant. While I provide health suggestions based on data patterns, I am not a substitute for professional medical advice, diagnosis, or clinical treatment.",
+                    "Important: I do not provide official medical diagnoses. My role is to help you track and understand wellness patterns. Please see a healthcare provider for any specific medical concerns.",
+                    "I am an AI, not a doctor. My responses are based on general health guidelines and your provided data. I recommend prioritizing a consultation with a medical expert for any persistent health issues."
                 ]
             },
             {
-                keywords: ["emergency", "severe", "chest pain", "can't breathe", "shortness of breath", "bleeding", "stroke", "heart attack", "unconscious"],
+                keywords: ["emergency", "severe", "chest pain", "can't breathe", "shortness of breath", "bleeding", "stroke", "heart attack", "unconscious", "911", "hospital", "urgent"],
                 responses: [
-                    "⚠️ **IMMEDIATE ACTION REQUIRED**: If you are experiencing a medical emergency like severe chest pain or difficulty breathing, please call your local emergency services (like 911) or visit the nearest ER immediately.",
-                    "I am detecting symptoms that could be life-threatening. Please stop using this app and seek immediate professional medical attention. Seconds count in an emergency.",
-                    "⚠️ This sounds like an emergency. Do not wait for an AI response. Call emergency services right now.",
-                    "Your symptoms indicate a possible critical emergency. Please contact emergency medical services immediately."
+                    "⚠️ **IMMEDIATE ACTION REQUIRED**: If you are experiencing a medical emergency like severe chest pain, difficulty breathing, or sudden numbness, please call 911 (or your local emergency services) or visit the nearest Emergency Room immediately.",
+                    "I am detecting symptoms that could be life-threatening. **Please stop using this app and seek immediate professional medical attention.** Every second counts in a medical emergency.",
+                    "⚠️ This sounds like a critical emergency. Please do not wait for an AI response. Contact emergency services right now.",
+                    "Your symptoms indicate a possible medical emergency. Please contact emergency services or go to the nearest hospital immediately. I am an AI and cannot provide emergency medical care."
                 ]
             },
             {
-                keywords: ["heart", "palpitation", "heart racing", "fluttering", "irregular heartbeat", "pounding chest"],
+                keywords: ["heart", "palpitation", "heart racing", "fluttering", "irregular heartbeat", "pounding chest", "cardiac"],
                 responses: [
-                    "Heart palpitations can be caused by stress, caffeine, or dehydration, but they can also signal underlying issues. If you have chest pain or faintness, seek medical help immediately.",
-                    "An irregular or racing heart should always be evaluated by a cardiologist. Try to track when they happen—is it after coffee, during stress, or at rest? This info helps your doctor.",
-                    "If your heart feels like it's skipping beats or racing, try to stay calm and sit down. If it lasts more than a few minutes or returns often, please schedule a check-up.",
-                    "Caffeine and nicotine are common triggers for palpitations. However, persistent 'fluttering' in the chest needs a professional EKG to rule out serious conditions."
+                    "Heart palpitations can be caused by stress, caffeine, or dehydration, but they can also signal underlying cardiac issues. If you have chest pain or faintness, seek medical help immediately.",
+                    "An irregular or racing heart should always be evaluated by a cardiologist. Try to track when they happen—is it after caffeine, during stress, or at rest? This information helps your doctor's assessment.",
+                    "If your heart feels like it's skipping beats or racing, try to sit down and practice slow, deep breathing. If it lasts more than a few minutes or recurs frequently, please schedule a professional check-up.",
+                    "Caffeine, nicotine, and stress are common triggers for palpitations. However, persistent 'fluttering' in the chest needs a professional EKG to rule out serious conditions like arrhythmia."
                 ]
             },
             {
-                keywords: ["blood pressure", "hypertension", "hypotension", "bp"],
+                keywords: ["blood pressure", "hypertension", "hypotension", "bp", "systolic", "diastolic"],
                 responses: [
-                    "Blood pressure is a key vital. Hypertension (high BP) is often 'silent'. Aim for 120/80 mmHg. Reducing sodium and increasing potassium can help, but medication must be managed by a doctor.",
-                    "If your BP is low (hypotension), you might feel dizzy when standing up. Increasing salt and fluids can help, but you should discuss the cause with a physician.",
-                    "Consistent tracking of your blood pressure is vital for long-term heart health. Our assessment helps identify if your lifestyle is increasing your risk.",
-                    "High blood pressure is a leading risk factor for stroke. Regular cardio and managing stress through mindfulness are scientifically proven ways to support healthy levels."
+                    "Blood pressure is a key indicator of cardiovascular health. Hypertension (high BP) is often 'silent'. Aim for a healthy range near 120/80 mmHg. Reducing sodium and staying active are excellent first steps, but medication must be managed by a doctor.",
+                    "If your BP is low (hypotension), you might feel dizzy when standing up. While increasing hydration can help, you should discuss persistent low blood pressure with a physician to find the cause.",
+                    "Consistent tracking of your blood pressure is vital for long-term health. Our assessment tool helps you identify if your lifestyle habits are positively or negatively impacting your heart health.",
+                    "High blood pressure is a leading risk factor for stroke and heart disease. Regular cardio and managing stress through mindfulness are scientifically proven ways to support healthy levels."
                 ]
             },
             {
-                keywords: ["cholesterol", "ldl", "hdl", "triglycerides"],
+                keywords: ["cholesterol", "ldl", "hdl", "triglycerides", "lipid"],
                 responses: [
-                    "Cholesterol management is about the balance between HDL (good) and LDL (bad). Increasing fiber and healthy fats like Omega-3s can significantly improve your profile.",
-                    "High LDL cholesterol can lead to arterial plaque. Regular exercise and avoiding trans fats are the best natural ways to keep your heart healthy.",
-                    "If your triglycerides are high, consider reducing refined sugars and alcohol. A Mediterranean-style diet is often recommended for better cholesterol levels.",
-                    "Always discuss your blood panel results with a doctor. My data analysis can help identify lifestyle habits that might be influencing your cholesterol numbers."
+                    "Cholesterol management is about the balance between HDL (good) and LDL (bad). Increasing soluble fiber and healthy fats like Omega-3s (found in fish and nuts) can significantly improve your lipid profile.",
+                    "High LDL cholesterol can lead to arterial plaque buildup. Regular aerobic exercise and avoiding trans fats are the most effective natural ways to support your heart health.",
+                    "If your triglycerides are high, consider reducing refined sugars and alcohol consumption. A Mediterranean-style diet is often recommended for maintaining healthy cholesterol levels.",
+                    "Always discuss your blood panel results with a doctor. My analysis can help you identify which lifestyle habits might be influencing your cholesterol numbers over time."
                 ]
             },
             {
-                keywords: ["asthma", "wheezing", "tight chest", "bronchitis"],
+                keywords: ["asthma", "wheezing", "tight chest", "bronchitis", "lung", "coughing"],
                 responses: [
-                    "Asthma is a chronic condition that requires a proper management plan from a doctor. Ensure you have your rescue inhaler available and try to identify triggers like pollen or pet dander.",
-                    "Wheezing or a tight chest can indicate airway inflammation. If you find yourself using your rescue inhaler more than twice a week, your asthma might not be well-controlled.",
-                    "Managing air quality and humidity in your home can help with respiratory comfort. However, please consult a pulmonologist for a personalized treatment plan.",
-                    "Asthma triggers vary. Some people react to cold air, others to exercise. Tracking these events can help you and your doctor manage the condition better."
+                    "Asthma is a chronic condition that requires a proper management plan from a physician. Ensure you have your rescue inhaler accessible and try to identify triggers like pollen, dust, or pet dander.",
+                    "Wheezing or a tight chest can indicate airway inflammation. If you find yourself using your rescue inhaler more than twice a week, your asthma might not be optimally controlled. Consult a pulmonologist.",
+                    "Managing air quality and humidity in your home can help with respiratory comfort. However, please consult a lung specialist for a personalized and effective treatment plan.",
+                    "Asthma triggers vary significantly by individual. Some people react to cold air, others to intense exercise. Tracking these triggers in your history can help you manage the condition better."
                 ]
             },
             {
-                keywords: ["acid reflux", "gerd", "heartburn", "indigestion"],
+                keywords: ["acid reflux", "gerd", "heartburn", "indigestion", "stomach acid"],
                 responses: [
-                    "Heartburn is often caused by stomach acid backing up into the esophagus. Avoiding large meals before bed and reducing spicy/acidic foods can offer significant relief.",
-                    "GERD can be serious if left untreated. Try 'propped up' sleeping and small, frequent meals. If you have persistent trouble swallowing, see a doctor immediately.",
-                    "Common triggers for acid reflux include caffeine, alcohol, and chocolate. Losing a bit of weight if you're overweight can also reduce the pressure on your stomach.",
-                    "Ginger tea is a great natural aid for mild indigestion. If you're using antacids every day, it's time to speak with a professional about long-term management."
+                    "Heartburn is often caused by stomach acid backing up into the esophagus. Avoiding large meals before bed and reducing spicy or acidic foods can offer significant, immediate relief.",
+                    "GERD (Gastroesophageal Reflux Disease) can lead to serious complications if chronic. Try small, frequent meals and avoid lying down for 3 hours after eating. If you have trouble swallowing, see a doctor immediately.",
+                    "Common triggers for acid reflux include caffeine, alcohol, chocolate, and peppermint. Maintaining a healthy weight can also reduce the physical pressure on your stomach.",
+                    "Ginger tea is a great natural aid for mild indigestion. However, if you're relying on antacids daily, it's time to speak with a professional about long-term management strategies."
                 ]
             },
             {
-                keywords: ["bloating", "gas", "constipation", "diarrhea", "ibs", "gut", "stomach pain", "tummy ache", "digestion"],
+                keywords: ["bloating", "gas", "constipation", "diarrhea", "ibs", "gut", "stomach pain", "tummy ache", "digestion", "metabolism"],
                 responses: [
-                    "Digestive issues are often linked to fiber intake and hydration. For constipation, ensure you're getting enough soluble fiber and water. For diarrhea, focus on electrolytes.",
-                    "IBS (Irritable Bowel Syndrome) is complex. A 'Low FODMAP' diet is often used to identify triggers. Stress also plays a huge role in gut health due to the brain-gut axis.",
-                    "Persistent bloating can be a sign of food intolerances or small intestinal bacterial overgrowth. Try keeping a food diary to find out what's causing your discomfort.",
-                    "Probiotics and prebiotics support a healthy gut microbiome. Fiber-rich foods like oats, beans, and berries are essential for keeping your digestion regular."
+                    "Digestive issues are often linked to fiber intake and hydration levels. For constipation, ensure you're getting enough soluble fiber and water. For diarrhea, focus on electrolyte replenishment.",
+                    "IBS (Irritable Bowel Syndrome) is complex and often linked to the brain-gut axis. A 'Low FODMAP' diet is frequently used to identify food triggers, alongside stress management techniques.",
+                    "Persistent bloating can be a sign of food intolerances or gut flora imbalances. Try keeping a detailed food diary to identify patterns between what you eat and how you feel.",
+                    "Probiotics and prebiotics support a healthy gut microbiome. Fiber-rich foods like oats, beans, and berries are essential for keeping your digestion regular and efficient."
                 ]
             },
             {
-                keywords: ["sleep", "sleeping", "insomnia", "tired", "rest", "night", "can't sleep", "sleepy", "bedtime"],
+                keywords: ["sleep", "sleeping", "insomnia", "tired", "rest", "night", "can't sleep", "sleepy", "bedtime", "nap", "circadian"],
                 responses: [
-                    "Sleep is the ultimate high-performance drug! Aim for 7-9 hours. A 'digital detox' 30 minutes before bed can significantly improve your REM sleep quality. Check your Sleep Consistency chart on the Dashboard!",
-                    "Quality matters! Try to keep your room cool (around 18°C/65°F) and dark. Avoid caffeine after 2 PM to ensure your adenosine levels are ready for rest by bedtime.",
-                    "If you're having trouble falling asleep, try 'progressive muscle relaxation' or a white noise machine. Consistent sleep/wake times are the foundation of a healthy circadian rhythm.",
-                    "Struggling with insomnia? It might be related to stress or blue light exposure. Our 'Health Tips' section has a guide on building the perfect wind-down routine.",
-                    "Sleep deprivation can mimic ADHD symptoms and raise your risk for heart issues. Prioritizing rest is the single best thing you can do for your health today."
+                    "Sleep is the ultimate biological optimization tool! Aim for 7-9 hours of quality rest. A 'digital detox'—avoiding blue light 30 minutes before bed—can significantly improve your REM sleep quality.",
+                    "Consistency is key for your circadian rhythm. Try to keep your room cool, dark, and quiet. Avoid caffeine after 2 PM to ensure your body is naturally ready for rest by bedtime.",
+                    "If you're having trouble falling asleep, try 'progressive muscle relaxation' or a white noise machine. Your Dashboard tracks your Sleep Consistency—aim for a steady pattern for best result.",
+                    "Chronic sleep deprivation can mimic ADHD symptoms and elevate your long-term risk for heart issues. Prioritizing rest is one of the most impactful things you can do for your health."
                 ]
             },
             {
-                keywords: ["fatigue", "tiredness", "exhaustion", "no energy", "anemia", "weak", "lethargic", "always tired"],
+                keywords: ["fatigue", "tiredness", "exhaustion", "no energy", "anemia", "weak", "lethargic", "always tired", "burned out"],
                 responses: [
-                    "Persistent fatigue can be a sign of many things, from simple dehydration to iron-deficiency anemia. Ensure you're getting enough protein and iron-rich foods like spinach and lentils.",
-                    "Feeling weak or lethargic? Check your B12 and Vitamin D levels. If you're also experiencing shortness of breath or paleness, please consult a doctor for a blood panel.",
-                    "Fatigue is often the result of cumulative stress. Are you taking enough 'micro-breaks' during the day? Sometimes just 5 minutes of deep breathing can restore your energy.",
-                    "Low energy can also be linked to your blood sugar. Avoid the 'sugar crash' by choosing complex carbs like oats or quinoa over refined sweets.",
-                    "If you're 'always tired' despite getting 8 hours of sleep, it's worth discussing with a professional to rule out conditions like sleep apnea or thyroid issues."
+                    "Persistent fatigue can be a sign of many factors, from dehydration to iron-deficiency. Ensure you're consuming enough protein and iron-rich foods like spinach, lentils, or lean meats.",
+                    "Feeling weak or lethargic? It could be related to Vitamin D or B12 levels. If you also experience shortness of breath or unusual paleness, please consult a doctor for a full blood panel.",
+                    "Fatigue is often the result of cumulative mental or physical stress. Are you taking enough 'micro-breaks' during the day? Even 5 minutes of deep breathing can help restore energy levels.",
+                    "Low energy can also be linked to blood sugar fluctuations. Avoid 'sugar crashes' by choosing complex carbohydrates like oats or quinoa over refined sweets and sugary drinks."
                 ]
             },
             {
-                keywords: ["joint pain", "arthritis", "stiff joints", "knee pain", "hip pain", "aching bones", "joint stiffness", "painful joints"],
+                keywords: ["joint pain", "arthritis", "stiff joints", "knee pain", "hip pain", "aching bones", "joint stiffness", "painful joints", "inflammation", "mobility"],
                 responses: [
                     "Joint pain can be inflammatory (like Rheumatoid Arthritis) or wear-and-tear (Osteoarthritis). Low-impact movement like swimming or cycling helps keep joints mobile without extra stress.",
                     "Stiffness in the morning that lasts more than 30 minutes should be evaluated by a rheumatologist. Omega-3 supplements and turmeric are often used for natural inflammation support.",
-                    "Protect your joints by maintaining a healthy weight. Extra kilos put significant pressure on your knees and hips. Strength training also supports the muscles around the joints.",
-                    "Warm compresses can help with stiffness, while ice is better for acute inflammation. If a joint is hot, red, and swollen, seek medical attention to rule out infection."
+                    "Protect your joints by maintaining a healthy weight. Extra pressure on your knees and hips accelerates cartilage wear. Strength training also supports the stabilizing muscles.",
+                    "Warm compresses can help with stiffness, while ice is better for acute inflammation. If a joint is hot, red, and swollen, seek medical attention immediately to rule out infection."
                 ]
             },
             {
-                keywords: ["muscle cramp", "spasm", "charlie horse", "tight muscle", "muscle pain", "sore muscle", "aching muscles"],
+                keywords: ["muscle cramp", "spasm", "charlie horse", "tight muscle", "muscle pain", "sore muscle", "aching muscles", "recovery", "magnesium"],
                 responses: [
                     "Muscle cramps are usually caused by dehydration or electrolyte imbalances (Magnesium, Potassium, Calcium). Ensure you're drinking enough water during and after exercise.",
-                    "If you get frequent night cramps, try gentle stretching before bed and check your magnesium levels. A warm bath with Epsom salts can also relax the muscles.",
-                    "Acute spasms can sometimes be a sign of muscle strain. Rest, ice, and gentle stretching are the standard recovery steps. If the pain is severe, see a professional.",
-                    "Ensure you're warming up properly before intense activity. Cramps are often your body's way of saying the muscle is fatigued or under-fueled."
+                    "If you get frequent night cramps, try gentle stretching before bed and check your magnesium levels. A warm bath with Epsom salts can also relax the muscle fibers.",
+                    "Acute spasms can sometimes be a sign of muscle strain. Rest, ice, and gentle stretching are the standard recovery steps. If the pain is severe or localized, see a professional.",
+                    "Ensure you're warming up properly before intense activity. Cramps are often your body's way of signaling that a muscle is fatigued or under-fueled."
                 ]
             },
             {
-                keywords: ["headache", "migraine", "head pain", "tension"],
+                keywords: ["headache", "migraine", "head pain", "tension", "sinus headache", "cluster headache"],
                 responses: [
                     "Headaches are often signals—check hydration, stress, and sleep first. Tension headaches feel like a tight band around the head, while migraines are usually throbbing and one-sided.",
-                    "Migraines can be debilitating. Dark rooms, cold compresses, and avoiding triggers like aged cheeses or nitrates can help. Track your migraines in your assessment history!",
-                    "If your headache comes on suddenly and is the most severe you've ever felt ('thunderclap'), call emergency services immediately. It could be serious.",
-                    "Screen time and poor neck posture are leading causes of tension headaches. Try the 'chin tuck' stretch and take regular breaks from your device."
+                    "Migraines can be debilitating and often have specific triggers like aged cheeses, nitrates, or sensory overload. Track your migraines in your history to find patterns!",
+                    "⚠️ **Warning**: If your headache comes on suddenly and is the most severe you've ever felt ('thunderclap'), call emergency services immediately. It could be a sign of something serious.",
+                    "Screen time and poor neck posture (tech-neck) are leading causes of tension headaches. Try the 'chin tuck' stretch and take eye-breaks every 20 minutes."
                 ]
             },
             {
-                keywords: ["dizzy", "dizziness", "lightheaded", "faint", "vertigo"],
+                keywords: ["dizzy", "dizziness", "lightheaded", "faint", "vertigo", "spinning", "unbalanced"],
                 responses: [
-                    "Dizziness can be caused by low blood sugar, dehydration, or inner ear issues. Sit down immediately if you feel faint to avoid a fall. Drink some water or have a small snack.",
-                    "Vertigo (the feeling that the room is spinning) often stems from the inner ear. If it's accompanied by vision changes or slurred speech, seek emergency care immediately.",
-                    "Standing up too quickly can cause a drop in blood pressure (orthostatic hypotension), leading to dizziness. Take your time when getting out of bed.",
-                    "Persistent dizziness requires a medical check-up to rule out heart issues or anemia. Keep track of when it happens to help your doctor diagnose the cause."
+                    "Dizziness can be caused by low blood sugar, dehydration, or inner ear issues. Sit down immediately if you feel faint to avoid a fall. Drink some water and monitor for any sudden changes.",
+                    "Vertigo (the feeling that the room is spinning) often stems from inner ear imbalances. If it's accompanied by sudden vision changes or slurred speech, seek emergency care immediately.",
+                    "Standing up too quickly can cause a temporary drop in blood pressure (orthostatic hypotension). Take your time when getting out of bed or a chair to let your body adjust.",
+                    "Persistent dizziness requires a medical check-up to rule out cardiac issues or anemia. Keep track of when it happens—after meals, during stress, or when moving—to help your doctor."
                 ]
             },
             {
-                keywords: ["nausea", "vomiting", "sick to stomach", "feel sick", "puking", "upset stomach", "queasy"],
+                keywords: ["nausea", "vomiting", "sick to stomach", "feel sick", "puking", "upset stomach", "queasy", "stomach flu"],
                 responses: [
-                    "Nausea is a common symptom of everything from food poisoning to stress. Peppermint or ginger tea can be very effective natural remedies.",
-                    "If you're vomiting frequently, the biggest risk is dehydration. Sip small amounts of clear fluids or electrolyte drinks. Seek help if you can't keep water down for 24 hours.",
-                    "Rest and avoiding strong odors are key when you feel nauseous. The BRAT diet (Bananas, Rice, Applesauce, Toast) is gentle on the stomach as you recover.",
-                    "Chronic nausea might be related to acid reflux or gastroparesis. It's important to discuss persistent stomach issues with a gastroenterologist."
+                    "Nausea is a common symptom of everything from food poisoning to intense stress. Peppermint or ginger tea are very effective natural remedies for mild queasiness.",
+                    "If you're vomiting frequently, the primary risk is dehydration. Sip very small amounts of clear fluids or electrolyte drinks. Seek help if you cannot keep water down for 24 hours.",
+                    "Rest and avoiding strong odors are key when you feel nauseous. The BRAT diet (Bananas, Rice, Applesauce, Toast) is gentle on the stomach as it recovers from acute distress.",
+                    "Chronic nausea might be related to acid reflux, gastroparesis, or food sensitivities. It's important to discuss persistent stomach issues with a gastroenterologist."
                 ]
             },
             {
-                keywords: ["fever", "temperature", "chills", "hot", "sweating"],
+                keywords: ["fever", "temperature", "chills", "hot", "sweating", "flu symptoms"],
                 responses: [
-                    "A fever is usually your body's immune system fighting an infection. Rest, hydration, and light clothing are recommended. Monitor it closely—especially if it hits 103°F (39.4°C).",
-                    "Stay hydrated! Fevers cause you to lose fluids through sweating. Water, broth, and herbal teas are excellent. If the fever lasts more than 3 days, see a doctor.",
-                    "A fever accompanied by a stiff neck or a rash is an emergency—please seek immediate medical attention. Otherwise, focus on comfort and rest.",
-                    "Listen to your body. If you have a fever plus a new cough or body aches, you may have a virus. Isolate if necessary and prioritize recovery."
+                    "A fever is usually your body's immune system fighting an infection. Rest, hydration, and breathable clothing are recommended. Monitor it closely—especially if it hits 103°F (39.4°C).",
+                    "Stay hydrated! Fevers cause significant fluid loss through sweating. Water, clear broths, and herbal teas are excellent. If a high fever lasts more than 3 days, consult a physician.",
+                    "⚠️ **Caution**: A fever accompanied by a stiff neck, severe headache, or a new rash is an emergency—please seek immediate medical attention. Otherwise, focus on comfort.",
+                    "Listen to your body. If you have a fever plus a new cough or severe body aches, you may have a viral infection. Prioritize recovery and isolate if you suspect a contagious virus."
                 ]
             },
             {
@@ -696,21 +694,21 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["rash", "skin", "itchy", "eczema", "hives", "acne"],
+                keywords: ["rash", "skin", "itchy", "eczema", "hives", "acne", "dermatology", "dry skin"],
                 responses: [
-                    "Skin rashes often signal an allergic reaction or irritation. Avoid scratching, use mild soaps, and try a cool compress. If the rash is painful or blistering, see a doctor.",
-                    "Hives are usually an allergic response. If you have hives along with swelling of the face or trouble breathing, use an EpiPen (if prescribed) and call 911 immediately.",
-                    "Eczema or dry skin requires constant moisturization. Natural oils or unscented creams are best. Stay hydrated, as your skin health reflects your internal hydration.",
-                    "Acne is often tied to hormonal changes or diet. Focus on a low-sugar diet and gentle cleansing. If it's persistent and inflammatory, a dermatologist can provide medical treatments."
+                    "Skin rashes often signal an allergic reaction, irritation, or an underlying immune response. Avoid scratching, use mild soaps, and try a cool compress for immediate relief.",
+                    "Hives are usually an acute allergic response. If you have hives along with swelling of the face or trouble breathing, use an EpiPen (if prescribed) and call 911 immediately.",
+                    "Eczema or chronicaly dry skin requires constant, barrier-repairing moisturization. Natural oils or unscented creams are best. Stay hydrated, as your skin reflects your internal health.",
+                    "Acne is often tied to hormonal shifts or diet. Focus on a low-glycemic diet and gentle, non-stripping cleansing. If it's persistent and inflammatory, see a dermatologist."
                 ]
             },
             {
-                keywords: ["panic attack", "cant breathe", "anxiety attack"],
+                keywords: ["panic attack", "cant breathe", "anxiety attack", "feeling of doom", "racing heart anxiety"],
                 responses: [
-                    "A panic attack can feel like it will never end, but it will. Try 'square breathing': inhale for 4, hold for 4, exhale for 4, hold for 4. Focus on your surroundings.",
-                    "If you feel a panic attack coming, try the 5-4-3-2-1 technique: identify 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste. This ground you in the present.",
-                    "Panic attacks can mimic heart attacks. If you have crushing chest pain or pain radiating to your arm, call 911 immediately just to be safe. Otherwise, focus on slow, deep breaths.",
-                    "Anxiety is your brain's 'alarm system' going off too early. It's uncomfortable but not dangerous. Remind yourself: 'I am safe, and this will pass'."
+                    "A panic attack can feel overwhelming, but remember: it will pass. Try 'box breathing': inhale for 4, hold for 4, exhale for 4, hold for 4. Repeat until you feel grounded.",
+                    "If you feel a panic attack coming, try the 5-4-3-2-1 grounding technique: identify 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste. This pulls your brain back to the present.",
+                    "Panic attacks can mimic cardiac emergencies. If you have crushing chest pain or pain radiating to your arm, call 911 immediately to be safe. If it's pure anxiety, focus on lengthening your exhale.",
+                    "Anxiety is your body's 'fight-or-flight' system activating prematurely. It's profoundly uncomfortable but physiologically safe. Remind yourself: 'I am safe, and this sensation is temporary'."
                 ]
             },
             {
@@ -723,12 +721,12 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["burnout", "exhausted", "stressed", "overwhelmed"],
+                keywords: ["burnout", "exhausted", "stressed", "overwhelmed", "work stress", "career fatigue"],
                 responses: [
-                    "Burnout is your body's way of demanding rest. You cannot pour from an empty cup. Prioritize sleep, say 'no' to new commitments, and take a true break if possible.",
-                    "Stress management is a skill. Try mindfulness or light exercise. If your stress is chronic, it can lead to physical issues, so it's important to find balance.",
-                    "Feeling overwhelmed? Break your day into tiny tasks. Focus only on the 'next right thing'. And remember, it's okay to ask for support from colleagues or family.",
-                    "Recovery from burnout takes time. Be patient with yourself. Focus on basic needs: hydration, nutritious food, and movement. Your productivity is not your worth."
+                    "Burnout is a state of chronic physical and emotional exhaustion. You cannot pour from an empty cup. Prioritize sleep, set firm boundaries, and take a true digital detox if possible.",
+                    "Chronic stress management is a vital life skill. Try mindfulness or low-intensity exercise like walking. If your stress levels remain high, consider speaking with a career coach or therapist.",
+                    "Feeling overwhelmed? Break your day into 'micro-tasks'. Focus only on the immediate next step. It's okay—and often necessary—to ask for support from colleagues or family.",
+                    "Recovery from burnout is a marathon, not a sprint. Be patient with yourself. Focus on fundamental pillars: hydration, nutritious food, and consistent rest. Your value is not defined by your productivity."
                 ]
             },
             {
@@ -741,21 +739,21 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["adhd", "focus", "concentration", "distracted", "productive"],
+                keywords: ["adhd", "focus", "concentration", "distracted", "productive", "time management", "brain fog"],
                 responses: [
-                    "Struggling to focus? Try the 'Pomodoro Technique': work for 25 minutes, then take a 5-minute break. This keeps your brain fresh and managed.",
-                    "Eliminate digital distractions! Put your phone in another room. A clear workspace often leads to a clear mind. Try to do your most demanding task first thing in the morning.",
-                    "ADHD brains often thrive on 'interest-based' tasks. If a task is boring, try to find a way to make it novel or challenging. Exercise before work can also boost dopamine and focus.",
-                    "Ensure you're sleeping enough. Sleep deprivation mimics ADHD symptoms and makes focusing almost impossible. A consistent routine is your best tool for productivity."
+                    "Struggling to focus? Try the 'Pomodoro Technique': work for 25 focused minutes, then take a 5-minute movement break. This cycle keeps your brain engaged and prevents cognitive overload.",
+                    "Eliminate ambient distractions! Use noise-canceling headphones or a clear workspace. A 'low-dopamine' environment makes it easier for your brain to engage with complex tasks.",
+                    "Neurodivergent brains often thrive on 'interest-based' motivation. If a task feels insurmountable, try to gamify it or add a novel challenge. Morning exercise also improves dopamine regulation.",
+                    "Sleep quality is the foundation of cognitive function. Sleep deprivation significantly amplifies ADHD symptoms. Check our 'Health Tips' for a focus-boosting morning routine."
                 ]
             },
             {
-                keywords: ["keto", "ketogenic", "low carb", "high fat", "no sugar diet"],
+                keywords: ["keto", "ketogenic", "low carb", "high fat", "no sugar diet", "ketosis"],
                 responses: [
-                    "The Keto diet shifts your body to burn fat for fuel. It's effective for some but can cause the 'Keto Flu' (fatigue, headaches) initially. Ensure you're getting enough electrolytes!",
-                    "Keto is very restrictive. It can be great for blood sugar control, but may be hard on the kidneys if not done correctly. Consult a nutritionist before going long-term.",
-                    "Don't forget the fiber! Keto can lead to constipation if you don't eat enough leafy greens. Avocado, nuts, and seeds are your best friends here.",
-                    "Is Keto right for you? It depends on your metabolic goals. Our assessment can help you track your energy levels as you experiment with different dietary patterns."
+                    "The Ketogenic diet shifts your metabolism to burn fat for fuel. It's effective for some but can cause 'Keto Flu' (fatigue, brain fog) initially. Ensure you're strictly managing your electrolytes!",
+                    "Keto is therapeutically powerful but very restrictive. It can improve insulin sensitivity but may be taxing on the kidneys if protein intake is too high. Consult a nutritionist for long-term guidance.",
+                    "Prioritize fiber! Keto can impact gut health if you skip leafy greens. Avocado, nuts, and seeds are essential for healthy fats and necessary micronutrients.",
+                    "Is Keto sustainable for you? It depends on your unique metabolic profile. Use your HealthMate Dashboard to track how your energy and mood respond to low-carb phases."
                 ]
             },
             {
@@ -768,21 +766,21 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["intermittent fasting", "if", "fasting window", "16:8"],
+                keywords: ["intermittent fasting", "if", "fasting window", "16:8", "autophagy", "fasting"],
                 responses: [
-                    "Intermittent Fasting (IF) can support metabolic health and weight loss. The 16:8 method is the most popular. Remember, it's about *timing*, but *quality* of food still matters.",
-                    "Fasting isn't about starving; it's about giving your digestive system and insulin levels a break. Stay hydrated with water, black coffee, or tea during fasting hours.",
-                    "Some people find IF helps with mental clarity and energy. However, if you have a history of eating disorders or are pregnant, it's not recommended.",
-                    "Start slow—try 12 hours of fasting first. Listen to your body's hunger cues. If you feel dizzy or weak, break your fast and try a different approach."
+                    "Intermittent Fasting (IF) can support metabolic flexibility and weight management. The 16:8 method is a balanced starting point. Remember, the quality of your food during the eating window is still paramount.",
+                    "Fasting isn't about deprivation; it's about optimizing insulin sensitivity and giving your digestive system a functional break. Stay hydrated with water or black coffee during your fasting hours.",
+                    "Many people find IF improves cognitive clarity and morning energy. However, it's not recommended for those with a history of eating disorders, pregnant individuals, or those with specific metabolic conditions.",
+                    "Start gradually—try a 12-hour window first and listen to your body's biofeedback. If you experience persistent dizziness or weakness, break your fast and reassess your approach."
                 ]
             },
             {
-                keywords: ["mediterranean diet", "healthy fats", "olive oil", "dash diet"],
+                keywords: ["mediterranean diet", "healthy fats", "olive oil", "dash diet", "heart healthy diet"],
                 responses: [
-                    "The Mediterranean and DASH diets are heart-healthy gold standards. They emphasize olive oil, fish, nuts, and a colorful array of fruits and vegetables.",
-                    "Focus on 'good' fats (Omega-3s) and whole grains. These diets are proven to reduce the risk of stroke, heart disease, and cognitive decline as you age.",
-                    "The DASH diet is specifically designed to lower blood pressure. It's rich in potassium, calcium, and magnesium. Check our tips for heart-healthy shopping lists!",
-                    "Think of it as a lifestyle, not a diet. Enjoying meals with others and staying active are key components of the Mediterranean approach to wellness."
+                    "The Mediterranean and DASH diets are the gold standards of cardiovascular nutrition. They emphasize extra virgin olive oil, fatty fish, diverse nuts, and an abundance of seasonal vegetables.",
+                    "Focus on 'functional' fats (Omega-3s) and complex grains. These dietary patterns are clinically proven to reduce the risk of stroke, heart disease, and age-related cognitive decline.",
+                    "The DASH diet is specifically engineered to optimize blood pressure. It's naturally rich in potassium, calcium, and magnesium. Check our 'Health Tips' for heart-healthy shopping lists!",
+                    "Think of it as a sustainable lifestyle rather than a restrictive diet. Sharing meals and staying physically active are core cultural components of these health-promoting traditions."
                 ]
             },
             {
@@ -795,21 +793,21 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["protein", "whey", "amino acids", "muscle building"],
+                keywords: ["protein", "whey", "amino acids", "muscle building", "lean protein", "macronutrients"],
                 responses: [
-                    "Protein is the building block of muscle and skin. Aim for 0.8g to 1.6g per kilo of body weight depending on your activity level. Variety is key!",
-                    "Plant proteins (beans, soy) are just as effective as animal proteins when you get a wide variety of amino acids. Don't skip your legumes!",
-                    "Consuming protein after a workout helps with muscle repair. You don't need a massive shake—a balanced meal with ~20-30g of protein is usually enough.",
-                    "As you age, protein becomes even more important to prevent muscle loss (sarcopenia). Ensure every meal has a quality protein source."
+                    "Protein is the structural foundation for muscle repair, skin health, and enzyme production. Aim for 1.2g to 1.6g per kilogram of body weight if you are physically active. Variety is key!",
+                    "Plant-based proteins (lentils, soy, hemp) are highly effective when you consume a diverse range of amino acids. Don't underestimate the power of legumes for muscle maintenance.",
+                    "Consuming 20-30g of protein following a resistance workout significantly aids muscle protein synthesis. You don't necessarily need supplements—whole food sources are often superior.",
+                    "As we age, protein becomes critical for preventing muscle loss (sarcopenia). Ensure every meal contains a high-quality protein source to maintain functional strength and metabolism."
                 ]
             },
             {
-                keywords: ["sugar", "sweet", "carbs", "diabetes basics"],
+                keywords: ["sugar", "sweet", "carbs", "diabetes basics", "insulin", "glucose"],
                 responses: [
-                    "Refined sugar is a leading cause of inflammation and weight gain. Try to swap sugary snacks for whole fruits, which contain fiber to slow down sugar absorption.",
-                    "Diabetes involves issues with insulin—the hormone that manages blood sugar. If you're constantly thirsty or urinating often, get your A1C levels checked.",
-                    "Total carbs aren't always the enemy, but 'simple' carbs (white bread, soda) cause blood sugar spikes. Choose complex carbs like sweet potatoes and brown rice.",
-                    "Reducing sugar can improve your skin, energy levels, and heart health. Our 'Health Tips' have a great guide on hidden sugars in processed foods."
+                    "Refined sugar is a primary driver of systemic inflammation and metabolic dysfunction. Try swapping processed sweets for whole fruits, which provide fiber to modulate glucose absorption.",
+                    "Diabetes involves a dysfunction in insulin signaling. If you experience persistent thirst or frequent urination, please consult a medical professional for an A1C screening.",
+                    "Carbohydrates are not the 'enemy', but their source matters. Choose complex, high-fiber carbs like sweet potatoes and quinoa over refined flours and sugary beverages to maintain steady energy.",
+                    "Reducing added sugar can improve your skin clarity, energy stability, and cardiovascular health. Our 'Health Tips' section has a guide on identifying hidden sugars in processed foods."
                 ]
             },
             {
@@ -822,30 +820,30 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["caffeine", "coffee", "tea", "energy drink", "jitters"],
+                keywords: ["caffeine", "coffee", "tea", "energy drink", "jitters", "adenosine"],
                 responses: [
-                    "Caffeine is a powerful stimulant. While 1-2 cups of coffee have health benefits, too much can lead to anxiety, jitters, and poor sleep. Know your limit!",
-                    "Caffeine has a half-life of 5-6 hours. If you drink a cup at 4 PM, half of it is still in your system at 10 PM. Try to have your last cup before 2 PM.",
-                    "Green tea provides a more 'gentle' energy boost thanks to L-Theanine, which calms the caffeine jitters. It's also packed with antioxidants.",
-                    "If you're relying on energy drinks to get through the day, you might be masking chronic sleep deprivation. Focus on quality rest first!"
+                    "Caffeine is a potent adenosine antagonist. While moderate coffee consumption offers neuroprotective benefits, excessive intake can lead to anxiety, heart palpitations, and disrupted sleep.",
+                    "Caffeine has a half-life of approximately 5-6 hours. If you consume it at 4 PM, half is still bioactive at 10 PM. To protect your sleep architecture, try to set a 'caffeine cutoff' at 2 PM.",
+                    "Matcha and green tea offer a more moderated energy boost due to L-Theanine, which mitigates the 'jitters' and supports focused calm. It's also exceptionally high in antioxidants.",
+                    "Relying on energy drinks to bypass fatigue often masks chronic sleep debt. Focus on restoring your circadian rhythm first for sustainable, natural energy levels."
                 ]
             },
             {
-                keywords: ["exercise", "workout", "fitness", "active", "walking", "gym", "hiit", "cardio"],
+                keywords: ["exercise", "workout", "fitness", "active", "walking", "gym", "hiit", "cardio", "longevity"],
                 responses: [
-                    "Exercise is the closest thing we have to a miracle cure. Aim for at least 150 minutes of moderate activity per week. Even walking counts!",
-                    "HIIT (High-Intensity Interval Training) is great for heart health and time efficiency. 20 minutes can be more effective than an hour of slow walking.",
-                    "Strength training is vital for longevity. It protects your joints, boosts metabolism, and keeps your bones strong. Try to lift weights twice a week.",
-                    "Consistency > Intensity. If you can only do 10 minutes today, do 10 minutes. It's about building the habit of daily movement."
+                    "Consistent exercise is the most powerful intervention for long-term health. Aim for at least 150 minutes of moderate activity or 75 minutes of vigorous activity per week. Every step counts!",
+                    "HIIT (High-Intensity Interval Training) is remarkably efficient for cardiovascular health and metabolic rate. Even a 15-minute session can yield significant physiological benefits.",
+                    "Resistance training is essential for longevity. It maintains bone density, boosts metabolic rate, and protects your joints. Aim for at least two comprehensive strength sessions weekly.",
+                    "Remember: Consistency > Intensity. If you only have 10 minutes today, use them. The goal is to build the identity of someone who moves their body every single day."
                 ]
             },
             {
-                keywords: ["lazy", "no motivation", "unmotivated", "hard to start"],
+                keywords: ["lazy", "no motivation", "unmotivated", "hard to start", "procrastination", "mental block"],
                 responses: [
-                    "Motivation is often the *result* of action, not the cause. Use the '2-minute rule': just put on your gym shoes. Usually, that's enough to get you moving.",
-                    "Don't wait for the 'perfect' time. It doesn't exist. Start where you are, with what you have. One small win today is better than a perfect plan tomorrow.",
-                    "Feeling lazy might just be a sign your body needs rest or better nutrition. If it's mental, try a quick change of environment—go outside for 5 minutes.",
-                    "Reward yourself! Celebrate the small wins, like choosing a salad or finishing a walk. Positive reinforcement builds long-term habits."
+                    "Motivation is often the *consequence* of action, not the prerequisite. Use the '5-minute rule': just start for five minutes. Almost always, the friction of starting is the hardest part.",
+                    "Don't wait for the 'perfect' state of mind; it rarely arrives. Discipline is simply doing what needs to be done when you don't feel like doing it. Focus on the first 2 minutes.",
+                    "Feeling unmotivated can be a signal from your body—check your sleep, hydration, and nutrition. If it's a mental block, a quick change of environment can reset your focus.",
+                    "Celebrate your 'small wins'. Choosing the stairs or drinking a glass of water are victories. Positive reinforcement is what builds sustainable, long-term healthy habits."
                 ]
             },
             {
@@ -858,21 +856,21 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["how to use", "dashboard", "assessment", "new test", "start", "instruction", "help me", "what can i do", "show me"],
+                keywords: ["how to use", "dashboard", "assessment", "new test", "start", "instruction", "help me", "what can i do", "show me", "tutorial"],
                 responses: [
-                    "Start with a 'New Assessment'—this is where our AI learns about you. Based on your inputs, your Dashboard will update with risk levels and health metrics.",
-                    "Your Dashboard is your command center. Check your 'Daily Activity Trend' and 'Sleep Consistency' bars to see how you're progressing over the week.",
-                    "The 'Health Tips' page has specialized guides. If you're stuck, try taking an assessment to see which area of your health needs the most attention.",
-                    "Every assessment you take is saved in your history. You can see your past risk scores in the History table at the bottom of the Dashboard."
+                    "To begin, navigate to 'New Assessment'—this is where our AI engine learns your health patterns. Once completed, your Dashboard will activate with personalized risk profiles.",
+                    "Your Dashboard serves as your wellness command center. Monitor your 'Weekly Activity Trend' and 'Sleep Consistency' to track your progress toward long-term vitality.",
+                    "The 'Health Tips' page contains curated, science-backed guides. If you're looking for specific advice, I recommend taking an assessment first to identify your primary focus areas.",
+                    "Every assessment is securely stored in your history. You can review past risk scores and habit trends in the interactive History table at the base of your Dashboard."
                 ]
             },
             {
-                keywords: ["who built this", "developer", "contact", "creators"],
+                keywords: ["who built this", "developer", "contact", "creators", "technology", "brain.js"],
                 responses: [
-                    "HealthMate AI was built by a passionate team of developers dedicated to making proactive health tracking accessible to everyone. Our mission is wellness through data.",
-                    "This platform is part of a final project aimed at demonstrating the power of edge-based AI in health. We use modern web tech to deliver high-end wellness tools.",
-                    "Interested in the tech? We used HTML5, CSS3, and JavaScript, with Brain.js for our underlying predictive neural network models.",
-                    "We'd love to hear your feedback! While this is a demo version, we are constantly refining the AI's 'brain' to be more helpful and accurate."
+                    "HealthMate AI was crafted by a dedicated team of developers committed to making proactive health tracking accessible to all. Our mission is global wellness through data-driven insight.",
+                    "This platform is a final-year demonstration project showcasing the intersection of edge-based AI and preventative healthcare. We use modern web technologies to deliver a premium user experience.",
+                    "Curious about the tech? We built this using HTML5, CSS3, and JavaScript, leveraging the Brain.js library for our underlying neural network risk prediction models.",
+                    "We value your feedback! While this is a demonstration version, we are constantly refining our algorithms to be faster, more empathetic, and increasingly accurate."
                 ]
             },
             {
@@ -894,12 +892,12 @@ function initChatbot() {
                 ]
             },
             {
-                keywords: ["privacy", "data", "safe", "local storage", "security"],
+                keywords: ["privacy", "data", "safe", "local storage", "security", "encryption"],
                 responses: [
-                    "Privacy is our priority. In standalone mode, your data is stored ONLY in your local browser (LocalStorage). We don't see it, and we don't sell it.",
-                    "We use encrypted storage logic when in standalone mode to keep your health details secure on your own device. You hold the keys to your data.",
-                    "Your assessment history is between you and your computer. No central server handles your personal health information in this version of the app.",
-                    "Feel safe using HealthMate! We've built this with a 'privacy-first' architecture, ensuring your health journey remains yours alone."
+                    "Your privacy is our architectural foundation. In standalone mode, your health data is stored EXCLUSIVELY in your local browser (LocalStorage). We never see it, and we never transmit it.",
+                    "We utilize localized storage logic to ensure your health details remain on your device. You are the sole owner and guardian of your personal wellness data.",
+                    "Your assessment history stays strictly between you and your machine. No central server or third party has access to your sensitive health information in this version of the app.",
+                    "Experience complete peace of mind with HealthMate. We have intentionally built a privacy-first platform where security isn't just a feature—it's the default state."
                 ]
             },
             {
