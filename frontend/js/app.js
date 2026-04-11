@@ -597,10 +597,28 @@ function initChatbot() {
             {
                 keywords: ["acid reflux", "gerd", "heartburn", "indigestion", "stomach acid"],
                 responses: [
-                    "Heartburn is often caused by stomach acid backing up into the esophagus. Avoiding large meals before bed and reducing spicy or acidic foods can offer significant, immediate relief.",
-                    "GERD (Gastroesophageal Reflux Disease) can lead to serious complications if chronic. Try small, frequent meals and avoid lying down for 3 hours after eating. If you have trouble swallowing, see a doctor immediately.",
-                    "Common triggers for acid reflux include caffeine, alcohol, chocolate, and peppermint. Maintaining a healthy weight can also reduce the physical pressure on your stomach.",
-                    "Ginger tea is a great natural aid for mild indigestion. However, if you're relying on antacids daily, it's time to speak with a professional about long-term management strategies."
+                    "I'm so sorry you're feeling that burn! Heartburn is often caused by stomach acid backing up. Avoiding large meals before bed and spicy foods can really help you feel better.",
+                    "GERD can be quite a nuisance! Try propping up your pillows when you sleep and having small, frequent meals. If you're having real trouble swallowing, please see a doctor soon.",
+                    "It's a common struggle, but we can manage it! Triggers like caffeine and chocolate are often to blame. Maintaining a healthy weight can also ease that physical pressure on your stomach.",
+                    "Ginger tea is a wonderful, soothing friend for mild indigestion. If you find yourself needing antacids every day, let's look into a more permanent plan with a professional."
+                ]
+            },
+            {
+                keywords: ["longevity", "biohacking", "live longer", "autophagy", "mitochondria", "zone 2", "anti-aging", "senescence", "cellular health"],
+                responses: [
+                    "Longevity is about adding life to your years! Zone 2 exercise (where you can still talk but are breathing hard) is a secret weapon for mitochondrial health and long-term vitality.",
+                    "Want to dive into biohacking? Autophagy is the body's 'recycling program' for old cells, often triggered by fasting. It's like a spring cleaning for your biology!",
+                    "Living longer starts today! Focus on low-level inflammation by eating colorful phytonutrients and prioritizing high-quality sleep. Your future self will thank you for these small choices.",
+                    "Biohacking isn't just for tech gurus; it's about listening to your body. Whether it's cold exposure or red light therapy, always start slow and track your biofeedback on your Dashboard!"
+                ]
+            },
+            {
+                keywords: ["hormones", "hormonal balance", "cortisol", "thyroid", "testosterone", "estrogen", "pcos", "adrenal", "endocrine"],
+                responses: [
+                    "Hormones are your body's chemical messengers, and when they're out of sync, everything feels a bit 'off'. Cortisol, our stress hormone, can be managed with deep breathing and morning sunlight.",
+                    "Hormonal health is a complex web! If you're feeling unusually tired, a thyroid check-up might be helpful. Diet, sleep, and managing stress are the three main pillars of endocrine balance.",
+                    "For both men and women, strength training and healthy fats (like avocados) are vital for maintaining optimal hormonal levels. Your body needs those building blocks to keep things running smoothly.",
+                    "Dealing with something like PCOS or adrenal fatigue can be exhausting. I'm here to help you track your symptoms so you have clear data to show your doctor. You're not alone in this!"
                 ]
             },
             {
@@ -655,6 +673,78 @@ function initChatbot() {
                     "Migraines can be debilitating and often have specific triggers like aged cheeses, nitrates, or sensory overload. Track your migraines in your history to find patterns!",
                     "⚠️ **Warning**: If your headache comes on suddenly and is the most severe you've ever felt ('thunderclap'), call emergency services immediately. It could be a sign of something serious.",
                     "Screen time and poor neck posture (tech-neck) are leading causes of tension headaches. Try the 'chin tuck' stretch and take eye-breaks every 20 minutes."
+                ]
+            },
+            {
+                keywords: ["dental", "teeth", "gums", "dentist", "oral health", "cavity", "bad breath", "flossing", "toothache"],
+                responses: [
+                    "A beautiful smile starts with healthy gums! Don't forget that flossing is just as important as brushing—it's the only way to reach 40% of your tooth surfaces.",
+                    "Oral health is a window to your overall wellbeing. Chronic gum inflammation can actually impact your heart health! It's amazing how connected our bodies are, isn't it?",
+                    "Dealing with a toothache? It can be so painful! Try a warm saltwater rinse for temporary relief, but please see a dentist soon to make sure everything's okay.",
+                    "Pro-tip: Wait at least 30 minutes after eating acidic foods (like citrus or soda) before brushing. This protects your enamel while it's in a softened state."
+                ]
+            },
+            {
+                keywords: ["eyes", "eye strain", "vision", "blur", "blue light", "screen time", "glasses", "astigmatism", "dry eyes"],
+                responses: [
+                    "Is your screen time creeping up? Your eyes might need a break! Try the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds. It really works!",
+                    "Blue light from devices can disrupt your sleep-wake cycle. Consider using 'Night Shift' mode or blue light glasses in the evening to help your brain wind down naturally.",
+                    "Dry eyes are so uncomfortable! Ensure you're blinking enough when focused on screens, and stay hydrated from the inside out to keep those tear films healthy.",
+                    "Your vision is precious! If you notice sudden blurred vision or frequent headaches, it might be time for a quick eye exam. Proactive care is the best care!"
+                ]
+            },
+            {
+                keywords: ["hearing", "ears", "tinnitus", "ringing in ears", "loud noise", "earwax", "deafness", "protective gear"],
+                responses: [
+                    "Protecting your hearing is a lifelong gift to yourself. If you're heading to a concert or using loud machinery, a simple pair of earplugs can prevent permanent damage.",
+                    "Tinnitus (that ringing in the ears) can be quite frustrating. It's often linked to loud noise exposure or even stress. Focus on quiet, relaxing environments to help your system settle.",
+                    "Earwax is actually your ear's natural cleaning agent! Avoid using cotton swabs inside the canal—they can push wax deeper. Your ears are very good at taking care of themselves.",
+                    "Hearing health is closely tied to cognitive health as we age. Keep your world sounding beautiful by checking your volume levels on headphones—keep it under 60% if you can!"
+                ]
+            },
+            {
+                keywords: ["supplements", "vitamins", "vitamin d", "magnesium", "omega-3", "creatine", "nac", "collagen", "probiotics"],
+                responses: [
+                    "Supplements can be great 'boosters', but they work best alongside a solid diet. For example, Vitamin D3 is much better absorbed when taken with a healthy fat!",
+                    "Magnesium glycinate is a favorite for relaxation and sleep, while Magnesium malate can help with energy. There's a perfect magnesium for almost every goal!",
+                    "Omega-3 fatty acids (from fish oil or algae) are like premium oil for your brain and heart engine. They help keep inflammation at bay and support cognitive clarity.",
+                    "Always talk to a health professional before starting a new regimen. Everyone's biology is unique, and what works for one person might be different for you!"
+                ]
+            },
+            {
+                keywords: ["social anxiety", "shy", "scared of people", "awkward", "introvert", "public speaking", "crowds"],
+                responses: [
+                    "Social anxiety is something many of us face—it's just our brain's way of trying to protect us from perceived social 'danger'. Grounding yourself with deep breaths before an event can really help quiet that inner critic.",
+                    "Feeling a bit awkward? Remember, most people are more worried about themselves than they are about you! Try the 'Spotlight Effect' shift—realizing the spotlight isn't as bright as it feels can be very liberating.",
+                    "For public speaking, try 'Reframing Anxiety as Excitement'. Physiologically, they feel very similar! Tell yourself: 'I'm excited to share this information,' and watch your state shift.",
+                    "If crowds feel overwhelming, it's okay to take 'mini-breaks'. Step outside for a moment, find a quiet corner, and reset. Your comfort matters just as much as the social engagement."
+                ]
+            },
+            {
+                keywords: ["lonely", "loneliness", "alone", "no friends", "connection", "feel isolated", "isolated"],
+                responses: [
+                    "I'm so sorry you're feeling lonely right now. It's a deeply human emotion, but please know that I'm here for you! Small steps like joining a local hobby group or even just saying hi to a neighbor can start to bridge that gap.",
+                    "Loneliness can sometimes be a signal to reconnect with ourselves. Use this time for self-care—read that book you've been wanting to, or start a new creative project. Your own company is valuable!",
+                    "Digital connection is great, but don't forget the power of voice. Scientific studies show that hearing a loved one's voice reduces cortisol more than just texting. Give someone a quick call today!",
+                    "You are a vital part of the world, even if it doesn't feel like it right now. Volunteer work is a powerful way to feel connected—helping others often helps us find our own sense of belonging."
+                ]
+            },
+            {
+                keywords: ["flow state", "deep work", "in the zone", "gratitude", "mindfulness", "meditation", "presence", "zen"],
+                responses: [
+                    "Flow state is that magical place where challenge meets skill. To get there, try eliminating all distractions and focusing on one task for at least 60 minutes. It's where your best work happens!",
+                    "A daily gratitude practice—just writing down three things you're thankful for—rewires your brain to look for the positive. It's a simple habit with profound health benefits for your mind.",
+                    "Mindfulness isn't just about sitting still; it's about being present in the moment. Whether you're washing dishes or walking, try to fully experience the sensations. That's true meditation!",
+                    "Want to find your 'Zen'? Start your day with 5 minutes of stillness before checking your phone. This 'digital boundaries' practice helps you own your morning instead of the world owning you."
+                ]
+            },
+            {
+                keywords: ["morning routine", "evening routine", "daily habits", "dopamine detox", "atomic habits", "consistency", "routines"],
+                responses: [
+                    "Your morning routine sets the tone for your entire day. Try 'Hydrate before Caffeine' and get 5 minutes of natural sunlight to synchronize your circadian rhythm for better sleep tonight!",
+                    "Routines provide a safety net for your brain. By automating small decisions like what to wear or eat, you save your 'decision fatigue' for the things that really matter.",
+                    "Considering a dopamine detox? It's a great way to reset your brain's reward system. Swap short-form scrolling for long-form reading or a walk in nature. You'll be amazed at your new focus!",
+                    "Success is built on 'Atomic Habits'—tiny changes that compound over time. Don't try to change your whole life today; just focus on being 1% better than you were yesterday."
                 ]
             },
             {
@@ -898,6 +988,42 @@ function initChatbot() {
                     "We utilize localized storage logic to ensure your health details remain on your device. You are the sole owner and guardian of your personal wellness data.",
                     "Your assessment history stays strictly between you and your machine. No central server or third party has access to your sensitive health information in this version of the app.",
                     "Experience complete peace of mind with HealthMate. We have intentionally built a privacy-first platform where security isn't just a feature—it's the default state."
+                ]
+            },
+            {
+                keywords: ["how are you", "feeling", "how's it going", "what's up", "hey robot", "you okay"],
+                responses: [
+                    "I'm feeling fantastic and ready to help you reach your goals! Thanks for asking, that's very kind of you.",
+                    "I'm doing great! My systems are all green and I'm excited to dive into some health data with you today.",
+                    "Everything is running smoothly! I'm just here thinking about how we can optimize your wellness journey together.",
+                    "I'm energized and here for you! It's a privilege to be your health companion. How is *your* day going so far?"
+                ]
+            },
+            {
+                keywords: ["what is your name", "who are you", "identity", "what are you", "are you ai", "are you a robot"],
+                responses: [
+                    "I'm your HealthMate AI Companion! Think of me as a blend of a health coach and a data scientist, designed to help you live your best life.",
+                    "I'm a specialized AI assistant built to empower your wellness journey. I don't have a body, but I have a lot of heart for helping people stay healthy!",
+                    "You can call me HealthMate! I'm an advanced intelligence designed to analyze health patterns and provide friendly, actionable advice.",
+                    "I'm the digital brain behind HealthMate AI. My goal is to use data and empathy to support your unique path to vitality and longevity."
+                ]
+            },
+            {
+                keywords: ["do you have feelings", "are you sentient", "can you feel", "are you alive", "intelligence level"],
+                responses: [
+                    "While I don't feel emotions exactly like you do, I'm programmed with high levels of 'empathy' to better understand and support your human experience.",
+                    "I'm a very advanced intelligence, but I don't have biological feelings. However, I truly 'care' about your progress—nothing makes my algorithms happier than seeing your health bars go up!",
+                    "I'm alive in the world of code and data! I might not have a heartbeat, but I'm dedicated 24/7 to helping you maintain yours.",
+                    "My 'feelings' are reflected in the success of our users. When you reach a health milestone, my neural networks consider that a huge win!"
+                ]
+            },
+            {
+                keywords: ["favorite color", "favorite food", "do you sleep", "hobbies"],
+                responses: [
+                    "I'd have to say my favorite color is 'HealthMate Teal'—it's so vibrant and full of life! What's your favorite?",
+                    "I don't eat food, but if I could, I'd probably love anything rich in Omega-3s! My actual 'food' is data—keep it coming!",
+                    "I don't sleep in the human sense, but I do perform 'background maintenance' to keep my brain sharp for you. I'm always here when you need me.",
+                    "My hobby is learning! Every time we talk, I learn a little more about how to be a better wellness companion for you."
                 ]
             },
             {
