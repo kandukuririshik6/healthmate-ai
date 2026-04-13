@@ -663,6 +663,8 @@ button[type="submit"] {
     display: inline-block;
     max-width: 650px;
     margin: 0 auto;
+    list-style: none;
+    padding: 0;
 }
 
 #resultCard ul li {
