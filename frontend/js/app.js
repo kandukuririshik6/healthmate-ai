@@ -1319,38 +1319,59 @@ function runProactiveAnalysis(data) {
     const symptoms = data.symptoms || [];
 
     if (symptoms.includes('chest_pain') || symptoms.includes('shortness_breath')) {
-        seriousCaseConditions.push("Cardiovascular Issues / Heart Disease");
+        seriousCaseConditions.push({
+            title: "Cardiovascular Issues / Heart Disease",
+            description: "Your reported chest pain or shortness of breath suggests a need to monitor cardiovascular health closely, as these can be early indicators of heart strain."
+        });
         dynamicRecommendations.push("URGENT: Your symptoms (chest pain/shortness of breath) require immediate medical evaluation.");
         dynamicRecommendations.push("Diet: Adopt a heart-healthy diet rich in omega-3s (salmon, walnuts), oats, and leafy greens. Avoid high-sodium and fried foods.");
     }
 
     if (symptoms.includes('fever') || symptoms.includes('cough') || symptoms.includes('body_pain')) {
-        lowCaseConditions.push("Viral Infection / Common Cold");
+        lowCaseConditions.push({
+            title: "Viral Infection / Common Cold",
+            description: "Symptoms like fever and cough often point to a passing viral infection. Your body needs extra rest and fluid support during this recovery phase."
+        });
         dynamicRecommendations.push("Habits: Prioritize rest and hydration. Monitor your temperature and consult a doctor if fever persists beyond 48 hours.");
     }
 
     if (symptoms.includes('fatigue')) {
-        lowCaseConditions.push("Potential Anemia / Chronic Fatigue");
+        lowCaseConditions.push({
+            title: "Potential Anemia / Chronic Fatigue",
+            description: "Persistent fatigue can be linked to iron deficiency or lifestyle-induced exhaustion. Ensuring a nutrient-dense diet is key to restoring your energy."
+        });
         dynamicRecommendations.push("Diet: Ensure adequate iron and B12 intake. Consider a blood test if fatigue is persistent.");
     }
 
     if (symptoms.includes('nausea')) {
-        lowCaseConditions.push("Gastrointestinal Sensitivity");
+        lowCaseConditions.push({
+            title: "Gastrointestinal Sensitivity",
+            description: "Digestive discomfort like nausea suggests your gut might be temporarily sensitive to certain triggers or stress."
+        });
         dynamicRecommendations.push("Diet: Stick to bland foods (BRAT diet) and stay hydrated with electrolytes.");
     }
 
     if (symptoms.includes('frequent_urination') || symptoms.includes('increased_thirst')) {
-        seriousCaseConditions.push("Potential Early-stage Diabetes / Hyperglycemia");
+        seriousCaseConditions.push({
+            title: "Potential Early-stage Diabetes / Hyperglycemia",
+            description: "Increased thirst and frequent urination are classic signs of fluctuating blood glucose levels that warrant a clinical screening."
+        });
         dynamicRecommendations.push("Medical: These symptoms can be indicators of blood sugar issues. We strongly recommend a glucose screening.");
     }
 
     if (symptoms.includes('skin_rash')) {
-        lowCaseConditions.push("Potential Dermatological Sensitivity / Rash");
+        lowCaseConditions.push({
+            title: "Potential Dermatological Sensitivity / Rash",
+            description: "Skin irritation can arise from environmental allergens or localized reactions. Keeping the area clean and hydrated is essential."
+        });
         dynamicRecommendations.push("Skin Care: Avoid hash soaps and perfumes. Use a hypoallergenic moisturizer and monitor for spreading.");
     }
 
     if (symptoms.includes('dizziness')) {
-        lowCaseConditions.push("Dizziness / Potential Vertigo");
+        lowCaseConditions.push({
+            title: "Dizziness / Potential Vertigo",
+            description: "Dizziness is often tied to inner-ear balance or simple dehydration. Monitor your blood pressure and ensure consistent water intake."
+        });
         dynamicRecommendations.push("Safety: Avoid sudden movements. Ensure you are not dehydrated and check your blood pressure if dizziness persists.");
     }
 
@@ -1363,7 +1384,10 @@ function runProactiveAnalysis(data) {
     }
 
     if (symptoms.includes('headache')) {
-        lowCaseConditions.push("Tension Headaches / Dehydration");
+        lowCaseConditions.push({
+            title: "Tension Headaches / Dehydration",
+            description: "Headaches are commonly triggered by screen fatigue or low hydration levels. Small lifestyle adjustments can significantly reduce frequency."
+        });
         dynamicRecommendations.push("Habits: Monitor triggers for your headaches, such as screen time or caffeine withdrawal.");
     }
 
@@ -1372,7 +1396,10 @@ function runProactiveAnalysis(data) {
     }
 
     if (data.stress_level > 8) {
-        seriousCaseConditions.push("Potential Burnout / High Stress Fatigue");
+        seriousCaseConditions.push({
+            title: "Potential Burnout / High Stress Fatigue",
+            description: "Your critical stress levels indicate your system is in a state of 'fight or flight', which can lead to long-term burnout if not addressed."
+        });
         dynamicRecommendations.push("Mental Health: Your high stress levels indicate a risk of burnout. Prioritize a complete mental break or consult a specialist.");
     } else if (data.stress_level > 6) {
         dynamicRecommendations.push("Habits: Your stress levels are concerning. Implement daily relaxing activities like yoga or meditation to reduce cortisol.");
@@ -1391,7 +1418,9 @@ function runProactiveAnalysis(data) {
                 <span>🔹</span> Low Case Disease Risk
             </div>
             <div class="conditions-list">
-                ${lowCaseConditions.length > 0 ? lowCaseConditions.join(', ') : 'None detected (Healthy Profile)'}
+                ${lowCaseConditions.length > 0 ? 
+                    lowCaseConditions.map(c => `<div style="margin-bottom: 10px;"><strong>${c.title}</strong><br><label style="font-size: 0.9rem; opacity: 0.8;">${c.description}</label></div>`).join('') 
+                    : 'None detected (Healthy Profile)'}
             </div>
         </div>
     `;
@@ -1403,12 +1432,15 @@ function runProactiveAnalysis(data) {
                 <span>⚠️</span> Serious Case Disease Risk
             </div>
             <div class="conditions-list">
-                ${seriousCaseConditions.length > 0 ? seriousCaseConditions.join(', ') : 'None detected (No immediate major risk)'}
+                ${seriousCaseConditions.length > 0 ? 
+                    seriousCaseConditions.map(c => `<div style="margin-bottom: 10px;"><strong>${c.title}</strong><br><label style="font-size: 0.9rem; opacity: 0.8;">${c.description}</label></div>`).join('') 
+                    : 'None detected (No immediate major risk)'}
             </div>
         </div>
     `;
 
     explanation += `<div class="professional-disclaimer">Important: This is an AI-powered preventative forecast based on data patterns. It is for educational purposes only and is NOT a medical diagnosis. Always consult a licensed healthcare professional for medical advice.</div>`;
+
 
 
     return {
