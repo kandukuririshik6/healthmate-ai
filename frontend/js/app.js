@@ -386,7 +386,7 @@ function showAssessmentResult(result) {
     else if (result.riskLevel === 'High Risk') levelDisplay.classList.add('risk-High');
 
     // Update explanation
-    explanationText.textContent = result.explanation;
+    explanationText.innerHTML = result.explanation;
 
     // Update recommendations
     recsList.innerHTML = '';
@@ -1313,33 +1313,34 @@ function runProactiveAnalysis(data) {
     }
 
     let dynamicRecommendations = [];
-    let predictedConditions = [];
+    let lowCaseConditions = [];
+    let seriousCaseConditions = [];
     const diet = data.diet_quality.toLowerCase();
     const symptoms = data.symptoms || [];
 
     if (symptoms.includes('chest_pain') || symptoms.includes('shortness_breath')) {
-        predictedConditions.push("Cardiovascular Issues / Heart Disease");
+        seriousCaseConditions.push("Cardiovascular Issues / Heart Disease");
         dynamicRecommendations.push("URGENT: Your symptoms (chest pain/shortness of breath) require immediate medical evaluation.");
         dynamicRecommendations.push("Diet: Adopt a heart-healthy diet rich in omega-3s (salmon, walnuts), oats, and leafy greens. Avoid high-sodium and fried foods.");
     }
 
     if (symptoms.includes('fever') || symptoms.includes('cough') || symptoms.includes('body_pain')) {
-        predictedConditions.push("Viral Infection / Common Cold");
+        lowCaseConditions.push("Viral Infection / Common Cold");
         dynamicRecommendations.push("Habits: Prioritize rest and hydration. Monitor your temperature and consult a doctor if fever persists beyond 48 hours.");
     }
 
     if (symptoms.includes('fatigue')) {
-        predictedConditions.push("Potential Anemia / Chronic Fatigue");
+        lowCaseConditions.push("Potential Anemia / Chronic Fatigue");
         dynamicRecommendations.push("Diet: Ensure adequate iron and B12 intake. Consider a blood test if fatigue is persistent.");
     }
 
     if (symptoms.includes('nausea')) {
-        predictedConditions.push("Gastrointestinal Sensitivity");
+        lowCaseConditions.push("Gastrointestinal Sensitivity");
         dynamicRecommendations.push("Diet: Stick to bland foods (BRAT diet) and stay hydrated with electrolytes.");
     }
 
     if (symptoms.includes('frequent_urination') || symptoms.includes('increased_thirst')) {
-        predictedConditions.push("Potential Early-stage Diabetes / Hyperglycemia");
+        seriousCaseConditions.push("Potential Early-stage Diabetes / Hyperglycemia");
         dynamicRecommendations.push("Medical: These symptoms can be indicators of blood sugar issues. We strongly recommend a glucose screening.");
     }
 
@@ -1352,7 +1353,7 @@ function runProactiveAnalysis(data) {
     }
 
     if (symptoms.includes('headache')) {
-        predictedConditions.push("Tension Headaches / Dehydration");
+        lowCaseConditions.push("Tension Headaches / Dehydration");
         dynamicRecommendations.push("Habits: Monitor triggers for your headaches, such as screen time or caffeine withdrawal.");
     }
 
@@ -1368,11 +1369,23 @@ function runProactiveAnalysis(data) {
         dynamicRecommendations.push("Status: Your current habits are excellent! Continue maintaining this balanced lifestyle.");
     }
 
-    if (predictedConditions.length === 0) {
-        predictedConditions.push(riskLevel === 'Low Risk' ? "None detected (Healthy Profile)" : "General Mild Inflammation / Stress");
+    let explanation = `It takes courage to prioritize your health! Based on your habits and symptoms, we've identified potential future risks:<br><br>`;
+    
+    if (lowCaseConditions.length > 0) {
+        explanation += `<strong>Low Case Disease Risk:</strong> ${lowCaseConditions.join(', ')}<br>`;
+    } else if (seriousCaseConditions.length > 0) {
+        // If there are serious but no low case, just don't show low case line
+    } else {
+        explanation += `<strong>Low Case Disease Risk:</strong> None detected (Healthy Profile)<br>`;
     }
 
-    const explanation = `It takes courage to prioritize your health! Based on your habits and symptoms, you might have an elevated future risk for: ${predictedConditions.join(', ')}. Please remember this is a preventative forecast, not a diagnosis. Your daily habits are your superpower—by following these recommendations, you can build a stronger future!`;
+    if (seriousCaseConditions.length > 0) {
+        explanation += `<strong>Serious Case Disease Risk:</strong> ${seriousCaseConditions.join(', ')}<br>`;
+    } else {
+        explanation += `<strong>Serious Case Disease Risk:</strong> None detected (Low immediate risk for major conditions)<br>`;
+    }
+
+    explanation += `<br>Please remember this is a preventative forecast, not a diagnosis. Your daily habits are your superpower—by following these recommendations, you can build a stronger future!`;
 
     return {
         riskLevel: riskLevel,
