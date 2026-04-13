@@ -1344,6 +1344,16 @@ function runProactiveAnalysis(data) {
         dynamicRecommendations.push("Medical: These symptoms can be indicators of blood sugar issues. We strongly recommend a glucose screening.");
     }
 
+    if (symptoms.includes('skin_rash')) {
+        lowCaseConditions.push("Potential Dermatological Sensitivity / Rash");
+        dynamicRecommendations.push("Skin Care: Avoid hash soaps and perfumes. Use a hypoallergenic moisturizer and monitor for spreading.");
+    }
+
+    if (symptoms.includes('dizziness')) {
+        lowCaseConditions.push("Dizziness / Potential Vertigo");
+        dynamicRecommendations.push("Safety: Avoid sudden movements. Ensure you are not dehydrated and check your blood pressure if dizziness persists.");
+    }
+
     if (data.exercise_minutes < 30) {
         dynamicRecommendations.push("Exercise: Incorporate at least 30-45 minutes of moderate aerobic activity daily to lower your risk profile.");
     }
@@ -1361,7 +1371,10 @@ function runProactiveAnalysis(data) {
         dynamicRecommendations.push("Diet: Shift to a balanced diet. Include lean proteins, whole grains, and healthy fats to maximize your vitality.");
     }
 
-    if (data.stress_level > 6) {
+    if (data.stress_level > 8) {
+        seriousCaseConditions.push("Potential Burnout / High Stress Fatigue");
+        dynamicRecommendations.push("Mental Health: Your high stress levels indicate a risk of burnout. Prioritize a complete mental break or consult a specialist.");
+    } else if (data.stress_level > 6) {
         dynamicRecommendations.push("Habits: Your stress levels are concerning. Implement daily relaxing activities like yoga or meditation to reduce cortisol.");
     }
 
@@ -1369,23 +1382,34 @@ function runProactiveAnalysis(data) {
         dynamicRecommendations.push("Status: Your current habits are excellent! Continue maintaining this balanced lifestyle.");
     }
 
-    let explanation = `It takes courage to prioritize your health! Based on your habits and symptoms, we've identified potential future risks:<br><br>`;
+    let explanation = `<p style="margin-bottom: 1.5rem; font-weight: 500;">It takes courage to prioritize your health! Based on your unique symptoms and lifestyle data, we've identified the following preventative focus areas:</p>`;
     
-    if (lowCaseConditions.length > 0) {
-        explanation += `<strong>Low Case Disease Risk:</strong> ${lowCaseConditions.join(', ')}<br>`;
-    } else if (seriousCaseConditions.length > 0) {
-        // If there are serious but no low case, just don't show low case line
-    } else {
-        explanation += `<strong>Low Case Disease Risk:</strong> None detected (Healthy Profile)<br>`;
-    }
+    // Low Case Box
+    explanation += `
+        <div class="analysis-category-box low-case-box">
+            <div class="category-header">
+                <span>🔹</span> Low Case Disease Risk
+            </div>
+            <div class="conditions-list">
+                ${lowCaseConditions.length > 0 ? lowCaseConditions.join(', ') : 'None detected (Healthy Profile)'}
+            </div>
+        </div>
+    `;
 
-    if (seriousCaseConditions.length > 0) {
-        explanation += `<strong>Serious Case Disease Risk:</strong> ${seriousCaseConditions.join(', ')}<br>`;
-    } else {
-        explanation += `<strong>Serious Case Disease Risk:</strong> None detected (Low immediate risk for major conditions)<br>`;
-    }
+    // Serious Case Box
+    explanation += `
+        <div class="analysis-category-box serious-case-box">
+            <div class="category-header">
+                <span>⚠️</span> Serious Case Disease Risk
+            </div>
+            <div class="conditions-list">
+                ${seriousCaseConditions.length > 0 ? seriousCaseConditions.join(', ') : 'None detected (No immediate major risk)'}
+            </div>
+        </div>
+    `;
 
-    explanation += `<br>Please remember this is a preventative forecast, not a diagnosis. Your daily habits are your superpower—by following these recommendations, you can build a stronger future!`;
+    explanation += `<div class="professional-disclaimer">Important: This is an AI-powered preventative forecast based on data patterns. It is for educational purposes only and is NOT a medical diagnosis. Always consult a licensed healthcare professional for medical advice.</div>`;
+
 
     return {
         riskLevel: riskLevel,
