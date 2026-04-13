@@ -55,70 +55,71 @@ const isDbConnected = () => require('mongoose').connection.readyState === 1;
 // POST /register
 app.post('/register', async (req, res) => {
   const { name, email, password, age, gender } = req.body;
+  const normalizedEmail = email.toLowerCase().trim();
+  const cleanPassword = password.trim();
+
   try {
     if (isDbConnected()) {
-      const normalizedEmail = email.toLowerCase().trim();
       const existingUser = await User.findOne({ email: normalizedEmail });
       if (existingUser) return res.status(400).json({ error: "Email already registered" });
 
       const newUser = new User({ 
-        name, 
+        name: name.trim(), 
         email: normalizedEmail, 
-        password: password.trim(), 
+        password: cleanPassword, 
         age, 
         gender 
       });
       await newUser.save();
       return res.json({ message: "Registration successful", userId: newUser._id });
     } else {
-      throw new Error("DB not connected");
+      console.warn("MongoDB not connected, using Mock Fallback for registration.");
+      const mockId = req.body.userId || generateUserId(normalizedEmail);
+      if (mockData.users.find(u => u.email.toLowerCase().trim() === normalizedEmail)) {
+        return res.status(400).json({ error: "Email already registered (Mock)" });
+      }
+      const mockUser = { id: mockId, name: name.trim(), email: normalizedEmail, password: cleanPassword, age, gender };
+      mockData.users.push(mockUser);
+      saveMockData(mockData);
+      res.json({ message: "Registration successful (Mock Data)", userId: mockUser.id });
     }
   } catch (err) {
-    const normalizedEmail = email.toLowerCase().trim();
-    const mockId = req.body.userId || generateUserId(normalizedEmail);
-    
-    // Check if user already exists in mock data
-    if (mockData.users.find(u => u.email.toLowerCase().trim() === normalizedEmail)) {
-      return res.status(400).json({ error: "Email already registered (Mock)" });
-    }
-
-    const mockUser = { id: mockId, name, email: normalizedEmail, password: password.trim(), age, gender };
-    mockData.users.push(mockUser);
-    saveMockData(mockData);
-    res.json({ message: "Registration successful (Mock Data)", userId: mockUser.id });
+    console.error("Registration Error:", err);
+    res.status(500).json({ error: "Server error during registration" });
   }
 });
 
 // POST /login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  const normalizedEmail = email.toLowerCase().trim();
+  const cleanPassword = password.trim();
+
   try {
     if (isDbConnected()) {
-      const normalizedEmail = email.toLowerCase().trim();
-      const user = await User.findOne({ email: normalizedEmail, password: password.trim() });
+      const user = await User.findOne({ email: normalizedEmail, password: cleanPassword });
       if (user) {
-        // Map _id to id for frontend compatibility
         const userObj = user.toObject();
         userObj.id = userObj._id;
         return res.json({ message: "Login successful", user: userObj });
       }
       return res.status(401).json({ error: "Invalid credentials" });
     } else {
-      throw new Error("DB not connected");
+      console.warn("MongoDB not connected, using Mock Fallback for login.");
+      const finalUserId = req.body.userId || generateUserId(normalizedEmail);
+      const user = mockData.users.find(u => 
+        (u.email.toLowerCase().trim() === normalizedEmail && u.password === cleanPassword) || 
+        (u.id === finalUserId && u.password === cleanPassword)
+      );
+      if (user) {
+        res.json({ message: "Login successful (Mock Data)", user });
+      } else {
+        res.status(401).json({ error: "Invalid credentials" });
+      }
     }
   } catch (err) {
-    const normalizedEmail = email.toLowerCase().trim();
-    const cleanPassword = password.trim();
-    const finalUserId = req.body.userId || generateUserId(normalizedEmail);
-    const user = mockData.users.find(u => 
-      (u.email.toLowerCase().trim() === normalizedEmail && u.password === cleanPassword) || 
-      (u.id === finalUserId && u.password === cleanPassword)
-    );
-    if (user) {
-      res.json({ message: "Login successful (Mock Data)", user });
-    } else {
-      res.status(401).json({ error: "Invalid credentials" });
-    }
+    console.error("Login Error:", err);
+    res.status(500).json({ error: "Server error during login" });
   }
 });
 

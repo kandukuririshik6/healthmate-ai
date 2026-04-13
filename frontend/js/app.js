@@ -89,16 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await res.json();
 
                 if (res.ok) {
-                    // Always backup to local storage even if server registration succeeds
-                    let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                    const normalizedEmail = data.email.toLowerCase().trim();
-                    const existingIdx = users.findIndex(u => u.email.toLowerCase().trim() === normalizedEmail);
-                    if (existingIdx === -1) {
-                        users.push({ ...data, id: result.userId || Date.now() });
+                    // Sync to local DB for fallback
+                    let localUsers = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
+                    const normEmail = data.email.toLowerCase().trim();
+                    const existIdx = localUsers.findIndex(u => u.email.toLowerCase().trim() === normEmail);
+                    if (existIdx === -1) {
+                        localUsers.push({ ...data, id: result.userId || Date.now() });
                     } else {
-                        users[existingIdx] = { ...users[existingIdx], ...data, id: result.userId || users[existingIdx].id };
+                        localUsers[existIdx] = { ...localUsers[existIdx], ...data, id: result.userId || localUsers[existIdx].id };
                     }
-                    localStorage.setItem('healthmate_db', JSON.stringify(users));
+                    localStorage.setItem('healthmate_db', JSON.stringify(localUsers));
                     alert('Registration successful! Please login.');
                     window.location.href = 'login.html';
                 } else {
@@ -173,16 +173,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await res.json();
 
                 if (res.ok && result.user) {
-                    // Sync to local DB for fallback
-                    let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                    const normalizedEmail = data.email.toLowerCase().trim();
-                    const existingIdx = users.findIndex(u => u.email.toLowerCase().trim() === normalizedEmail);
-                    if (existingIdx === -1) {
-                        users.push(result.user);
+                    // Sync to local DB for fallback - CRITICAL: Preserve local password if server doesn't return it
+                    let localUsers = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
+                    const normEmail = data.email.toLowerCase().trim();
+                    const existIdx = localUsers.findIndex(u => u.email.toLowerCase().trim() === normEmail);
+                    if (existIdx === -1) {
+                        // If new from server, save with current login password
+                        localUsers.push({ ...result.user, password: data.password });
                     } else {
-                        users[existingIdx] = result.user;
+                        // Merge server data but keep the password (essential for offline fallback)
+                        localUsers[existIdx] = { 
+                            ...localUsers[existIdx], 
+                            ...result.user, 
+                            password: data.password || localUsers[existIdx].password 
+                        };
                     }
-                    localStorage.setItem('healthmate_db', JSON.stringify(users));
+                    localStorage.setItem('healthmate_db', JSON.stringify(localUsers));
 
                     localStorage.setItem('healthmate_user', JSON.stringify(result.user));
                     window.location.href = 'dashboard.html';
