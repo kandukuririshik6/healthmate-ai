@@ -1297,26 +1297,42 @@ async function handleStandaloneAssessment(data, btn, originalText) {
 }
 
 function runProactiveAnalysis(data) {
-    let riskScore = 0;
-    if (data.stress_level > 7) riskScore += 2;
-    if (data.sleep_hours < 6) riskScore += 1;
-    if (data.exercise_minutes < 30) riskScore += 1;
-    if (data.water_intake < 4) riskScore += 1;
-    if (data.diet_quality.toLowerCase() === 'poor') riskScore += 2;
-    riskScore += (data.symptoms || []).length;
+    // 1. Calculate Lifestyle Score (Lower is better, 0-10 range)
+    let lifestyleInconsistency = 0;
+    if (data.stress_level > 7) lifestyleInconsistency += 2;
+    if (data.sleep_hours < 6) lifestyleInconsistency += 2;
+    if (data.exercise_minutes < 20) lifestyleInconsistency += 2;
+    if (data.water_intake < 4) lifestyleInconsistency += 2;
+    if (data.diet_quality.toLowerCase() === 'poor') lifestyleInconsistency += 2;
+    
+    // 2. Calculate Symptom Burden
+    const symptoms = data.symptoms || [];
+    let symptomBurden = symptoms.length;
+    if (symptoms.includes('chest_pain') || symptoms.includes('shortness_breath')) symptomBurden += 3;
+    if (symptoms.includes('frequent_urination') || symptoms.includes('increased_thirst')) symptomBurden += 2;
 
+    // 3. Determine Risk Level with Mitigation
     let riskLevel = 'Low Risk';
-    if (data.symptoms.includes('chest_pain') || data.symptoms.includes('shortness_breath') || riskScore >= 6) {
+    let totalRisk = lifestyleInconsistency + symptomBurden;
+
+    if (totalRisk >= 8) {
         riskLevel = 'High Risk';
-    } else if (riskScore >= 3) {
+        // Mitigation: If lifestyle is perfect (0-1), demote to Moderate unless symptom burden is extreme
+        if (lifestyleInconsistency <= 2 && symptomBurden < 6) {
+            riskLevel = 'Moderate Risk';
+        }
+    } else if (totalRisk >= 4) {
         riskLevel = 'Moderate Risk';
+        if (lifestyleInconsistency <= 1) {
+            riskLevel = 'Low Risk';
+        }
     }
 
     let dynamicRecommendations = [];
     let lowCaseConditions = [];
     let seriousCaseConditions = [];
     const diet = data.diet_quality.toLowerCase();
-    const symptoms = data.symptoms || [];
+
 
     // --- CASE 1: Cardiovascular ---
     if (symptoms.includes('chest_pain') || symptoms.includes('shortness_breath')) {
@@ -1465,8 +1481,16 @@ function runProactiveAnalysis(data) {
         dynamicRecommendations.push("Status: Your current habits are excellent! Maintain this balanced lifestyle.");
     }
 
+    let openingText = "It takes courage to prioritize your health! Based on your unique symptoms and lifestyle data, we've identified the following preventative focus areas:";
+    
+    // Lifecycle Acknowledgment (Mitigation logic)
+    if (lifestyleInconsistency <= 2) {
+        openingText = `<span style="color: var(--accent); font-weight: 700;">🌟 Outstanding Habits Detected:</span> Your excellent lifestyle choices (sleep, diet, and activity) are providing a strong biological defense. While we've flagged some symptomatic areas below, your healthy foundation significantly aids in long-term prevention.`;
+    } else if (lifestyleInconsistency <= 4) {
+        openingText = `Your balanced lifestyle is a great asset. By addressing the symptomatic markers below, you can further optimize your health trajectory.`;
+    }
 
-    let explanation = `<p style="margin-bottom: 1.5rem; font-weight: 500;">It takes courage to prioritize your health! Based on your unique symptoms and lifestyle data, we've identified the following preventative focus areas:</p>`;
+    let explanation = `<p style="margin-bottom: 1.5rem; font-weight: 500;">${openingText}</p>`;
     
     // Low Case Box
     explanation += `
