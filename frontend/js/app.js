@@ -1318,96 +1318,153 @@ function runProactiveAnalysis(data) {
     const diet = data.diet_quality.toLowerCase();
     const symptoms = data.symptoms || [];
 
+    // --- CASE 1: Cardiovascular ---
     if (symptoms.includes('chest_pain') || symptoms.includes('shortness_breath')) {
+        let desc = "Your reported ";
+        const matched = [];
+        if (symptoms.includes('chest_pain')) matched.push("chest pain");
+        if (symptoms.includes('shortness_breath')) matched.push("shortness of breath");
+        desc += matched.join(" and ") + " suggest a significant strain on your cardiovascular system.";
+        
+        if (data.exercise_minutes === 0) {
+            desc += " This risk is critically compounded by a total lack of physical activity.";
+        } else if (data.exercise_minutes < 20) {
+            desc += " Low weekly activity further elevates this risk profile.";
+        }
+
         seriousCaseConditions.push({
-            title: "Cardiovascular Issues / Heart Disease",
-            description: "Your reported chest pain or shortness of breath suggests a need to monitor cardiovascular health closely, as these can be early indicators of heart strain."
+            title: matched.length > 1 ? "Major Cardiovascular Strain" : "Potential Cardiovascular Issues",
+            description: desc
         });
-        dynamicRecommendations.push("URGENT: Your symptoms (chest pain/shortness of breath) require immediate medical evaluation.");
-        dynamicRecommendations.push("Diet: Adopt a heart-healthy diet rich in omega-3s (salmon, walnuts), oats, and leafy greens. Avoid high-sodium and fried foods.");
+        
+        dynamicRecommendations.push("URGENT: Your symptoms require immediate medical evaluation.");
+        dynamicRecommendations.push("Diet: Adopt a heart-healthy diet rich in omega-3s, oats, and leafy greens. Avoid high-sodium foods.");
     }
 
+    // --- CASE 2: Diabetes / Metabolic ---
+    if (symptoms.includes('frequent_urination') || symptoms.includes('increased_thirst')) {
+        let desc = "The combination of ";
+        const matched = [];
+        if (symptoms.includes('frequent_urination')) matched.push("frequent urination");
+        if (symptoms.includes('increased_thirst')) matched.push("increased thirst");
+        desc += matched.join(" and ") + " is a primary indicator of fluctuating blood glucose levels.";
+
+        if (diet === 'poor') {
+            desc += " Your current high-sugar/processed diet is significantly worsening this metabolic outlook.";
+        }
+
+        seriousCaseConditions.push({
+            title: "Metabolic Risk / Potential Hyperglycemia",
+            description: desc
+        });
+        dynamicRecommendations.push("Medical: We strongly recommend a HbA1c or fasting glucose screening.");
+    }
+
+    // --- CASE 3: Viral / Respiratory ---
     if (symptoms.includes('fever') || symptoms.includes('cough') || symptoms.includes('body_pain')) {
+        let desc = "Presence of ";
+        const matched = [];
+        if (symptoms.includes('fever')) matched.push("fever");
+        if (symptoms.includes('cough')) matched.push("cough");
+        if (symptoms.includes('body_pain')) matched.push("body pain");
+        desc += matched.join(", ") + " indicates an active immune response to a viral or bacterial agent.";
+
+        if (data.sleep_hours < 5) {
+            desc += " Critical sleep deficiency is severely hindering your immune recovery.";
+        }
+
         lowCaseConditions.push({
-            title: "Viral Infection / Common Cold",
-            description: "Symptoms like fever and cough often point to a passing viral infection. Your body needs extra rest and fluid support during this recovery phase."
+            title: matched.length > 2 ? "Acute Viral Infection" : "Viral Infection / Common Cold",
+            description: desc
         });
-        dynamicRecommendations.push("Habits: Prioritize rest and hydration. Monitor your temperature and consult a doctor if fever persists beyond 48 hours.");
+        dynamicRecommendations.push("Habits: Prioritize 9+ hours of sleep and high fluid intake for the next 48 hours.");
     }
 
+    // --- CASE 4: Anemia / Fatigue ---
     if (symptoms.includes('fatigue')) {
+        let desc = "Persistent fatigue suggests your energy cycles are disrupted.";
+        if (diet === 'poor') desc += " This is likely linked to nutritional gaps (Iron/B12).";
+        if (data.stress_level > 8) desc += " High stress is also contributing to chronic adrenal exhaustion.";
+
         lowCaseConditions.push({
             title: "Potential Anemia / Chronic Fatigue",
-            description: "Persistent fatigue can be linked to iron deficiency or lifestyle-induced exhaustion. Ensuring a nutrient-dense diet is key to restoring your energy."
+            description: desc
         });
-        dynamicRecommendations.push("Diet: Ensure adequate iron and B12 intake. Consider a blood test if fatigue is persistent.");
+        dynamicRecommendations.push("Diet: Increase intake of iron-rich foods (spinach, lean meats) and consider a B-complex supplement.");
     }
 
+    // --- CASE 5: Gastrointestinal ---
     if (symptoms.includes('nausea')) {
+        let desc = "Digestive discomfort indicates gastrointestinal sensitivity.";
+        if (data.stress_level > 7) desc += " This is often exacerbated by high stress levels affecting gut health.";
+
         lowCaseConditions.push({
             title: "Gastrointestinal Sensitivity",
-            description: "Digestive discomfort like nausea suggests your gut might be temporarily sensitive to certain triggers or stress."
+            description: desc
         });
-        dynamicRecommendations.push("Diet: Stick to bland foods (BRAT diet) and stay hydrated with electrolytes.");
+        dynamicRecommendations.push("Diet: Stick to the BRAT diet (Bananas, Rice, Applesauce, Toast) until symptoms subside.");
     }
 
-    if (symptoms.includes('frequent_urination') || symptoms.includes('increased_thirst')) {
-        seriousCaseConditions.push({
-            title: "Potential Early-stage Diabetes / Hyperglycemia",
-            description: "Increased thirst and frequent urination are classic signs of fluctuating blood glucose levels that warrant a clinical screening."
-        });
-        dynamicRecommendations.push("Medical: These symptoms can be indicators of blood sugar issues. We strongly recommend a glucose screening.");
-    }
-
+    // --- CASE 6: Skin ---
     if (symptoms.includes('skin_rash')) {
         lowCaseConditions.push({
-            title: "Potential Dermatological Sensitivity / Rash",
-            description: "Skin irritation can arise from environmental allergens or localized reactions. Keeping the area clean and hydrated is essential."
+            title: "Dermatological Sensitivity",
+            description: "Skin irritation can arise from localized allergens. Monitor for spreading or heat in the area."
         });
-        dynamicRecommendations.push("Skin Care: Avoid hash soaps and perfumes. Use a hypoallergenic moisturizer and monitor for spreading.");
+        dynamicRecommendations.push("Skin Care: Use hypoallergenic cleansers and avoid fragranced products.");
     }
 
+    // --- CASE 7: Dizziness ---
     if (symptoms.includes('dizziness')) {
+        let desc = "Dizziness can stem from inner-ear issues or simple dehydration.";
+        if (data.water_intake < 4) desc += " Your critical lack of water intake (below 4 cups) is a highly probable cause.";
+
         lowCaseConditions.push({
             title: "Dizziness / Potential Vertigo",
-            description: "Dizziness is often tied to inner-ear balance or simple dehydration. Monitor your blood pressure and ensure consistent water intake."
+            description: desc
         });
-        dynamicRecommendations.push("Safety: Avoid sudden movements. Ensure you are not dehydrated and check your blood pressure if dizziness persists.");
+        dynamicRecommendations.push("Safety: Ensure immediate rehydration and avoid sudden postural changes.");
     }
 
-    if (data.exercise_minutes < 30) {
-        dynamicRecommendations.push("Exercise: Incorporate at least 30-45 minutes of moderate aerobic activity daily to lower your risk profile.");
-    }
-
-    if (data.sleep_hours < 7) {
-        dynamicRecommendations.push("Habits: Focus on sleep hygiene. Aim for 8 hours. Try a 10-minute wind-down routine before bed.");
-    }
-
+    // --- CASE 8: Headaches ---
     if (symptoms.includes('headache')) {
+        let desc = "Headaches are often triggered by tension or dehydration.";
+        if (data.sleep_hours < 6) desc += " Lack of sleep is likely the primary trigger for your current discomfort.";
+
         lowCaseConditions.push({
             title: "Tension Headaches / Dehydration",
-            description: "Headaches are commonly triggered by screen fatigue or low hydration levels. Small lifestyle adjustments can significantly reduce frequency."
+            description: desc
         });
-        dynamicRecommendations.push("Habits: Monitor triggers for your headaches, such as screen time or caffeine withdrawal.");
+        dynamicRecommendations.push("Habits: Reduce screen time and increase water intake to alleviate tension.");
     }
 
-    if (diet === 'poor' || diet === 'average') {
-        dynamicRecommendations.push("Diet: Shift to a balanced diet. Include lean proteins, whole grains, and healthy fats to maximize your vitality.");
-    }
-
+    // --- CASE 9: Mental Health (Standalone logic) ---
     if (data.stress_level > 8) {
+        let title = data.stress_level === 10 ? "CRITICAL: Autonomic Burnout" : "Potential Burnout / High Stress Fatigue";
         seriousCaseConditions.push({
-            title: "Potential Burnout / High Stress Fatigue",
-            description: "Your critical stress levels indicate your system is in a state of 'fight or flight', which can lead to long-term burnout if not addressed."
+            title: title,
+            description: `Your extreme stress level of ${data.stress_level}/10 indicates your body is in a state of chronic sympathetic nervous system activation, which can lead to rapid physical health decline.`
         });
-        dynamicRecommendations.push("Mental Health: Your high stress levels indicate a risk of burnout. Prioritize a complete mental break or consult a specialist.");
+        dynamicRecommendations.push("Mental Health: Immediate stress reduction is required. Consider professional counselling if levels remain above 8.");
     } else if (data.stress_level > 6) {
-        dynamicRecommendations.push("Habits: Your stress levels are concerning. Implement daily relaxing activities like yoga or meditation to reduce cortisol.");
+        dynamicRecommendations.push("Habits: Your stress levels are concerning. Practice meditation or deep breathing exercises daily.");
+    }
+
+    // --- Lifestyle Gaps (Filling Recommendations) ---
+    if (data.exercise_minutes < 30 && dynamicRecommendations.length < 5) {
+        dynamicRecommendations.push("Exercise: Try to achieve at least 30 minutes of walking daily to improve metabolic markers.");
+    }
+    if (data.sleep_hours < 7 && dynamicRecommendations.length < 5) {
+        dynamicRecommendations.push("Sleep: Aim for a consistent 8-hour window to allow for neurological repair.");
+    }
+    if (diet === 'average' && dynamicRecommendations.length < 5) {
+        dynamicRecommendations.push("Diet: Incorporate more whole foods and reduce processed sugar to stabilize energy.");
     }
 
     if (dynamicRecommendations.length === 0) {
-        dynamicRecommendations.push("Status: Your current habits are excellent! Continue maintaining this balanced lifestyle.");
+        dynamicRecommendations.push("Status: Your current habits are excellent! Maintain this balanced lifestyle.");
     }
+
 
     let explanation = `<p style="margin-bottom: 1.5rem; font-weight: 500;">It takes courage to prioritize your health! Based on your unique symptoms and lifestyle data, we've identified the following preventative focus areas:</p>`;
     
