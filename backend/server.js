@@ -57,16 +57,32 @@ app.post('/register', async (req, res) => {
   const { name, email, password, age, gender } = req.body;
   try {
     if (isDbConnected()) {
-      const newUser = new User({ name, email, password, age, gender });
+      const normalizedEmail = email.toLowerCase().trim();
+      const existingUser = await User.findOne({ email: normalizedEmail });
+      if (existingUser) return res.status(400).json({ error: "Email already registered" });
+
+      const newUser = new User({ 
+        name, 
+        email: normalizedEmail, 
+        password: password.trim(), 
+        age, 
+        gender 
+      });
       await newUser.save();
       return res.json({ message: "Registration successful", userId: newUser._id });
     } else {
       throw new Error("DB not connected");
     }
   } catch (err) {
-    console.warn("MongoDB Error, falling back to mock storage:", err.message);
-    const mockId = req.body.userId || generateUserId(email);
-    const mockUser = { id: mockId, name, email, password, age, gender };
+    const normalizedEmail = email.toLowerCase().trim();
+    const mockId = req.body.userId || generateUserId(normalizedEmail);
+    
+    // Check if user already exists in mock data
+    if (mockData.users.find(u => u.email.toLowerCase().trim() === normalizedEmail)) {
+      return res.status(400).json({ error: "Email already registered (Mock)" });
+    }
+
+    const mockUser = { id: mockId, name, email: normalizedEmail, password: password.trim(), age, gender };
     mockData.users.push(mockUser);
     saveMockData(mockData);
     res.json({ message: "Registration successful (Mock Data)", userId: mockUser.id });
@@ -78,7 +94,8 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     if (isDbConnected()) {
-      const user = await User.findOne({ email, password });
+      const normalizedEmail = email.toLowerCase().trim();
+      const user = await User.findOne({ email: normalizedEmail, password: password.trim() });
       if (user) {
         // Map _id to id for frontend compatibility
         const userObj = user.toObject();
@@ -90,9 +107,13 @@ app.post('/login', async (req, res) => {
       throw new Error("DB not connected");
     }
   } catch (err) {
-    console.warn("MongoDB Error, falling back to mock storage:", err.message);
-    const finalUserId = req.body.userId || generateUserId(email);
-    const user = mockData.users.find(u => (u.email === email && u.password === password) || (u.id === finalUserId && u.password === password));
+    const normalizedEmail = email.toLowerCase().trim();
+    const cleanPassword = password.trim();
+    const finalUserId = req.body.userId || generateUserId(normalizedEmail);
+    const user = mockData.users.find(u => 
+      (u.email.toLowerCase().trim() === normalizedEmail && u.password === cleanPassword) || 
+      (u.id === finalUserId && u.password === cleanPassword)
+    );
     if (user) {
       res.json({ message: "Login successful (Mock Data)", user });
     } else {

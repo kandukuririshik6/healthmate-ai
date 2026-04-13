@@ -1,5 +1,5 @@
 const API_URL = 'http://localhost:3000';
-const STANDALONE_MODE = true; // Set to true to bypass backend and use LocalStorage/Client-side logic only
+const STANDALONE_MODE = false; // Set to true to bypass backend and use LocalStorage/Client-side logic only
 
 // Helper to generate a unique, deterministic ID from email
 function generateUserId(email) {
@@ -40,13 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = `<span>Registering...</span>`;
             btn.disabled = true;
 
+            const rawEmail = document.getElementById('regEmail').value;
+            const normalizedEmail = rawEmail.toLowerCase().trim();
+            const cleanPassword = document.getElementById('regPassword').value.trim();
+
             const data = {
-                name: document.getElementById('regName').value,
-                email: document.getElementById('regEmail').value,
+                name: document.getElementById('regName').value.trim(),
+                email: normalizedEmail,
                 age: parseInt(document.getElementById('regAge').value),
                 gender: document.getElementById('regGender').value,
-                password: document.getElementById('regPassword').value,
-                userId: generateUserId(document.getElementById('regEmail').value)
+                password: cleanPassword,
+                userId: generateUserId(normalizedEmail)
             };
 
             // Password validation for special characters
@@ -86,11 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (res.ok) {
                     // Always backup to local storage even if server registration succeeds
                     let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                    const existing = users.find(u => u.email === data.email);
-                    if (!existing) {
+                    const normalizedEmail = data.email.toLowerCase().trim();
+                    const existingIdx = users.findIndex(u => u.email.toLowerCase().trim() === normalizedEmail);
+                    if (existingIdx === -1) {
                         users.push({ ...data, id: result.userId || Date.now() });
-                        localStorage.setItem('healthmate_db', JSON.stringify(users));
+                    } else {
+                        users[existingIdx] = { ...users[existingIdx], ...data, id: result.userId || users[existingIdx].id };
                     }
+                    localStorage.setItem('healthmate_db', JSON.stringify(users));
                     alert('Registration successful! Please login.');
                     window.location.href = 'login.html';
                 } else {
@@ -118,26 +125,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Login Form Handler
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        console.log("Login form detected, attaching listener...");
+
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("Login form submitted");
+
             const btn = loginForm.querySelector('button');
             const originalText = btn.innerText;
             btn.innerHTML = `<span>Logging in...</span>`;
             btn.disabled = true;
 
+            const rawEmail = document.getElementById('email').value;
+            const normalizedEmail = rawEmail.toLowerCase().trim();
+            const cleanPassword = document.getElementById('password').value.trim();
+
             const data = {
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
+                email: normalizedEmail,
+                password: cleanPassword,
             };
-            console.log("Attempting login for:", data.email);
+
 
 
             if (STANDALONE_MODE) {
                 // STANDALONE MODE: Bypass server and use local storage fallback
                 let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                const foundUser = users.find(u => u.email.toLowerCase() === data.email.toLowerCase() && u.password === data.password);
+                const foundUser = users.find(u => u.email.toLowerCase().trim() === data.email && u.password === data.password);
 
                 if (foundUser) {
                     const sessionUser = { ...foundUser };
@@ -161,13 +172,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await res.json();
 
                 if (res.ok && result.user) {
+                    // Sync to local DB for fallback
+                    let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
+                    const normalizedEmail = data.email.toLowerCase().trim();
+                    const existingIdx = users.findIndex(u => u.email.toLowerCase().trim() === normalizedEmail);
+                    if (existingIdx === -1) {
+                        users.push(result.user);
+                    } else {
+                        users[existingIdx] = result.user;
+                    }
+                    localStorage.setItem('healthmate_db', JSON.stringify(users));
+
                     localStorage.setItem('healthmate_user', JSON.stringify(result.user));
                     window.location.href = 'dashboard.html';
                 } else {
-                    // Try frontend fallback even if server returned 401 (user might have registered while server was down)
+                    // Try frontend fallback even if server returned 401
                     console.warn("Server login failed, attempting local storage fallback...");
                     let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                    const foundUser = users.find(u => u.email.toLowerCase() === data.email.toLowerCase() && u.password === data.password);
+                    const foundUser = users.find(u => u.email.toLowerCase().trim() === data.email && u.password === data.password);
 
                     if (foundUser) {
                         const sessionUser = { ...foundUser };
@@ -182,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn("Login API error, using frontend fallback:", err);
                 // FALLBACK
                 let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
-                const foundUser = users.find(u => u.email.toLowerCase() === data.email.toLowerCase() && u.password === data.password);
+                const foundUser = users.find(u => u.email.toLowerCase().trim() === data.email && u.password === data.password);
 
                 if (foundUser) {
                     const sessionUser = { ...foundUser };
