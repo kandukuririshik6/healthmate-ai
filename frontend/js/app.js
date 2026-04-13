@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initChatbot();
     initReveal();
     initTheme();
+    initMobileMenu();
 
     // Register Form Handler
     const registerForm = document.getElementById('registerForm');
@@ -309,6 +310,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function initMobileMenu() {
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('navMenu');
+    const links = document.querySelectorAll('#navLinks a');
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        menu.classList.toggle('active');
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    });
+
+    // Close menu when a link is clicked
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            btn.classList.remove('active');
+            menu.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+}
+
 function updateAuthUI() {
     const user = JSON.parse(localStorage.getItem('healthmate_user'));
 
@@ -437,13 +461,22 @@ function initChatbot() {
     const body = document.getElementById('chatbot-body');
     const icon = document.getElementById('chatbot-icon');
 
+    const widget = document.getElementById('ai-chatbot');
+
     toggleBtn.addEventListener('click', () => {
-        if (body.style.display === 'none') {
+        widget.classList.toggle('active');
+        const isActive = widget.classList.contains('active');
+        
+        if (isActive) {
             body.style.display = 'flex';
             icon.textContent = '▼';
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = 'hidden'; // Lock background on mobile
+            }
         } else {
             body.style.display = 'none';
             icon.textContent = '▲';
+            document.body.style.overflow = 'auto';
         }
     });
 
