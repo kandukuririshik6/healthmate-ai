@@ -1,14 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs');
 const { User, Assessment } = require('./db');
 const { predictRisk, generateAdvice, generateChatResponse } = require('./ai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 const fs = require('fs');
 const path = require('path');
@@ -63,10 +65,12 @@ app.post('/register', async (req, res) => {
       const existingUser = await User.findOne({ email: normalizedEmail });
       if (existingUser) return res.status(400).json({ error: "Email already registered" });
 
+      const hashedPassword = await bcrypt.hash(cleanPassword, 10);
+
       const newUser = new User({ 
         name: name.trim(), 
         email: normalizedEmail, 
-        password: cleanPassword, 
+        password: hashedPassword, 
         age, 
         gender 
       });
@@ -78,7 +82,8 @@ app.post('/register', async (req, res) => {
       if (mockData.users.find(u => u.email.toLowerCase().trim() === normalizedEmail)) {
         return res.status(400).json({ error: "Email already registered (Mock)" });
       }
-      const mockUser = { id: mockId, name: name.trim(), email: normalizedEmail, password: cleanPassword, age, gender };
+      const hashedPassword = await bcrypt.hash(cleanPassword, 10);
+      const mockUser = { id: mockId, name: name.trim(), email: normalizedEmail, password: hashedPassword, age, gender };
       mockData.users.push(mockUser);
       saveMockData(mockData);
       res.json({ message: "Registration successful (Mock Data)", userId: mockUser.id });
@@ -97,10 +102,11 @@ app.post('/login', async (req, res) => {
 
   try {
     if (isDbConnected()) {
-      const user = await User.findOne({ email: normalizedEmail, password: cleanPassword });
-      if (user) {
+      const user = await User.findOne({ email: normalizedEmail });
+      if (user && await bcrypt.compare(cleanPassword, user.password)) {
         const userObj = user.toObject();
         userObj.id = userObj._id;
+        delete userObj.password;
         return res.json({ message: "Login successful", user: userObj });
       }
       return res.status(401).json({ error: "Invalid credentials" });
@@ -108,11 +114,14 @@ app.post('/login', async (req, res) => {
       console.warn("MongoDB not connected, using Mock Fallback for login.");
       const finalUserId = req.body.userId || generateUserId(normalizedEmail);
       const user = mockData.users.find(u => 
-        (u.email.toLowerCase().trim() === normalizedEmail && u.password === cleanPassword) || 
-        (u.id === finalUserId && u.password === cleanPassword)
+        (u.email.toLowerCase().trim() === normalizedEmail) || 
+        (u.id === finalUserId)
       );
-      if (user) {
-        res.json({ message: "Login successful (Mock Data)", user });
+      
+      if (user && await bcrypt.compare(cleanPassword, user.password)) {
+        const userObj = { ...user };
+        delete userObj.password;
+        res.json({ message: "Login successful (Mock Data)", user: userObj });
       } else {
         res.status(401).json({ error: "Invalid credentials" });
       }

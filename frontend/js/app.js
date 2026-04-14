@@ -11,6 +11,41 @@ function generateUserId(email) {
     }
 }
 
+// Professional Notification System
+function showNotification(message, type = 'info') {
+    let container = document.getElementById('notification-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'notification-container';
+        document.body.appendChild(container);
+    }
+
+    const notification = document.createElement('div');
+    const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+    };
+    
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span class="notification-icon">${icons[type] || 'ℹ️'}</span>
+        <span class="notification-message">${message}</span>
+    `;
+
+    container.appendChild(notification);
+
+    // Trigger animation
+    setTimeout(() => notification.classList.add('show'), 10);
+
+    // Auto remove
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 400);
+    }, 4000);
+}
+
 // Global Password Visibility Toggle
 window.togglePassword = function (inputId, iconElement) {
     const input = document.getElementById(inputId);
@@ -57,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Password validation for special characters
             const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/g;
             if (!specialCharPattern.test(data.password)) {
-                alert("For your security, your password must be strong and contain at least one special character (e.g., ! @ # $ %).");
+                showNotification("Password must contain at least one special character.", "error");
                 btn.innerText = originalText;
                 btn.disabled = false;
                 return;
@@ -67,13 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // STANDALONE MODE: Bypass server and use local storage directly
                 let users = JSON.parse(localStorage.getItem('healthmate_db') || '[]');
                 if (users.find(u => u.email.toLowerCase() === data.email.toLowerCase())) {
-                    alert('Email already registered! Please head to the login page.');
+                    showNotification('Email already registered! Please login.', 'error');
                 } else {
                     const newUser = { id: Date.now(), name: data.name, email: data.email, age: data.age, gender: data.gender, password: data.password };
                     users.push(newUser);
                     localStorage.setItem('healthmate_db', JSON.stringify(users));
-                    alert('Registration successful! Please login.');
-                    window.location.href = 'login.html';
+                    showNotification('Registration successful! Please login.', 'success');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
                 }
                 btn.innerHTML = `<span>${originalText}</span>`;
                 btn.disabled = false;
@@ -99,10 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         localUsers[existIdx] = { ...localUsers[existIdx], ...data, id: result.userId || localUsers[existIdx].id };
                     }
                     localStorage.setItem('healthmate_db', JSON.stringify(localUsers));
-                    alert('Registration successful! Please login.');
-                    window.location.href = 'login.html';
+                    showNotification('Registration successful! Please login.', 'success');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
                 } else {
-                    alert(result.error || 'Registration failed');
+                    showNotification(result.error || 'Registration failed', 'error');
                 }
             } catch (err) {
                 // FALLBACK
@@ -204,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('healthmate_user', JSON.stringify(sessionUser));
                         window.location.href = 'dashboard.html';
                     } else {
-                        alert(result.error || 'Invalid credentials');
+                        showNotification(result.error || 'Invalid credentials', 'error');
                     }
                 }
             } catch (err) {
@@ -234,8 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Enforce user authentication for assessment
         const user = JSON.parse(localStorage.getItem('healthmate_user'));
         if (!user) {
-            alert('Please login to perform a health assessment.');
-            window.location.href = 'login.html';
+            showNotification('Please login to perform a health assessment.', 'info');
+            setTimeout(() => window.location.href = 'login.html', 1500);
             return;
         }
 
@@ -258,6 +293,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 diet_quality: document.getElementById('dietQuality').value,
                 symptoms: symptoms
             };
+
+            if (symptoms.length === 0) {
+                showNotification("Please select at least one symptom for a better analysis.", "info");
+                btn.innerHTML = `<span>${originalText}</span>`;
+                btn.disabled = false;
+                return;
+            }
 
             if (STANDALONE_MODE) {
                 handleStandaloneAssessment(data, btn, originalText);
