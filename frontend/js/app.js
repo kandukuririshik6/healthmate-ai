@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveal();
     initTheme();
     initMobileMenu();
+    initPremiumInteractions();
 
     // Register Form Handler
     const registerForm = document.getElementById('registerForm');
@@ -1727,4 +1728,46 @@ function renderDashboardData(history) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-light);">No assessments taken yet. Take your first assessment to start tracking!</td></tr>';
         updateDashboardRiskBadge('No Data');
     }
+}
+
+// Premium Interactions (Sticky Header & Scroll Top)
+function initPremiumInteractions() {
+    const header = document.querySelector('header');
+    
+    // Create Scroll-to-Top button
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.className = 'scroll-top';
+    scrollTopBtn.innerHTML = '↑';
+    scrollTopBtn.setAttribute('aria-label', 'Scroll to top');
+    document.body.appendChild(scrollTopBtn);
+
+    window.addEventListener('scroll', () => {
+        // Sticky Header
+        if (window.scrollY > 50) {
+            header.classList.add('sticky');
+        } else {
+            header.classList.remove('sticky');
+        }
+
+        // Scroll Top Button Visibility
+        if (window.scrollY > 500) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Final Image Lazy Loading check
+    document.querySelectorAll('img').forEach(img => {
+        if (!img.hasAttribute('loading')) {
+            img.setAttribute('loading', 'lazy');
+        }
+    });
 }
