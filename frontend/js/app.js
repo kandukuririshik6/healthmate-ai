@@ -494,10 +494,45 @@ async function loadDashboard() {
         
         renderDashboardData(combinedHistory);
 
+        // Sync local items to server if they are not already there
+        syncLocalHistory(userId, user.email, result.history || []);
+
     } catch (err) {
         console.warn("Dashboard API error, using local fallback:", err);
         let userHistory = JSON.parse(localStorage.getItem('healthmate_history_' + user.email) || '[]');
         renderDashboardData(userHistory);
+    }
+}
+
+async function syncLocalHistory(userId, email, serverHistory) {
+    if (STANDALONE_MODE) return;
+    
+    let localHistory = JSON.parse(localStorage.getItem('healthmate_history_' + email) || '[]');
+    let unsynced = localHistory.filter(localItem => {
+        return !serverHistory.some(serverItem => {
+            const localTime = new Date(localItem.date).getTime();
+            const serverTime = new Date(serverItem.date).getTime();
+            return Math.abs(localTime - serverTime) < 60000;
+        });
+    });
+
+    if (unsynced.length === 0) return;
+
+    console.log(`Syncing ${unsynced.length} local records to server...`);
+    
+    for (const item of unsynced) {
+        try {
+            await fetch(`${API_URL}/history`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: userId,
+                    ...item
+                })
+            });
+        } catch (e) {
+            console.warn("Failed to sync record:", e);
+        }
     }
 }
 

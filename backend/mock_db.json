@@ -1,4 +1,13 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "hm_cmlzaGlAZ21haWw",
+      "name": "k rishi",
+      "email": "rishi@gmail.com",
+      "password": "$2a$10$u1d5bzSkDvyBxtuEd5G.rORAPPWTRtNxuO.sXqRVX63amQMjCwnFS",
+      "age": 20,
+      "gender": "Male"
+    }
+  ],
   "assessments": []
 }

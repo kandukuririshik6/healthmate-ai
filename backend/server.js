@@ -225,6 +225,42 @@ app.get('/history', async (req, res) => {
   res.json({ history });
 });
 
+// POST /history (For synchronization)
+app.post('/history', async (req, res) => {
+  const { userId, sleep_hours, exercise_minutes, stress_level, water_intake, risk_level, date } = req.body;
+
+  try {
+    if (isDbConnected() && typeof userId === 'string' && userId.length > 10) {
+      const newAssessment = new Assessment({
+        user_id: userId,
+        sleep_hours,
+        exercise_minutes,
+        stress_level,
+        water_intake,
+        risk_level,
+        date: date ? new Date(date) : new Date()
+      });
+      await newAssessment.save();
+    } else {
+      const mockEntry = { 
+        userId: userId || 'mock_1', 
+        risk_level, 
+        sleep_hours, 
+        exercise_minutes, 
+        stress_level, 
+        water_intake, 
+        date: date ? new Date(date) : new Date() 
+      };
+      mockData.assessments.push(mockEntry);
+      saveMockData(mockData);
+    }
+    res.json({ message: "History synced successfully" });
+  } catch (err) {
+    console.error("Sync Error:", err);
+    res.status(500).json({ error: "Failed to sync history" });
+  }
+});
+
 // POST /chat
 app.post('/chat', (req, res) => {
   const { message } = req.body;
