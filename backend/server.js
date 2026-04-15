@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Root route for status check
+app.get('/', (req, res) => {
+  res.send('HealthMate AI Backend is up and running! 🚀');
+});
+
 const fs = require('fs');
 const path = require('path');
 
