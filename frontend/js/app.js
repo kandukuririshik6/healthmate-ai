@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://healthmate-ai-k0wv.onrender.com';
 const STANDALONE_MODE = false; // Set to true to bypass backend and use LocalStorage/Client-side logic only
 
 // Helper to generate a unique, deterministic ID from email
