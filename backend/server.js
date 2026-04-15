@@ -12,13 +12,22 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Root route for status check
-app.get('/', (req, res) => {
-  res.send('HealthMate AI Backend is up and running! 🚀');
-});
-
 const fs = require('fs');
 const path = require('path');
+
+const FRONTEND_PATH = path.join(__dirname, '../frontend');
+
+app.use(express.static(FRONTEND_PATH));
+
+// Root route serves the frontend
+app.get('/', (req, res) => {
+  res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
+});
+
+// Health/status check route
+app.get('/status', (req, res) => {
+  res.send('HealthMate AI Backend is up and running! 🚀');
+});
 
 // Persistent Mock DB File
 const MOCK_DB_PATH = path.join(__dirname, 'mock_db.json');
@@ -168,7 +177,7 @@ app.post('/predict', async (req, res) => {
   } catch (err) {
     console.warn("MongoDB Error, falling back to mock storage:", err.message);
     const finalUserId = userId || 'mock_1';
-    const mockEntry = { userId: finalUserId, riskLevel, sleep_hours, exercise_minutes, stress_level, water_intake, date: new Date() };
+    const mockEntry = { userId: finalUserId, risk_level: riskLevel, sleep_hours, exercise_minutes, stress_level, water_intake, date: new Date() };
     mockData.assessments.push(mockEntry);
     saveMockData(mockData);
     res.json({ riskLevel, explanation: advice.explanation, recommendations: advice.recommendations });
@@ -178,18 +187,42 @@ app.post('/predict', async (req, res) => {
 // GET /history
 app.get('/history', async (req, res) => {
   const userId = req.query.userId || 'mock_1';
+  let history = [];
+
+  // 1. Try fetching from MongoDB if connected
   try {
     if (isDbConnected() && typeof userId === 'string' && userId.length > 10) {
-      const history = await Assessment.find({ user_id: userId }).sort({ date: -1 });
-      return res.json({ history });
-    } else {
-      throw new Error("DB not connected or invalid mocked ID");
+      const dbHistory = await Assessment.find({ user_id: userId }).sort({ date: -1 });
+      history = dbHistory.map(h => h.toObject());
     }
   } catch (err) {
-    console.warn("MongoDB Error, falling back to mock storage:", err.message);
-    const finalUserId = req.query.userId || 'mock_1';
-    res.json({ history: mockData.assessments.filter(a => a.userId == finalUserId) });
+    console.warn("MongoDB History Fetch Error:", err.message);
   }
+
+  // 2. Always check Mock storage for this user and merge (handles data saved during DB downtime)
+  try {
+    const mockHistory = mockData.assessments.filter(a => (a.userId || a.user_id) == userId);
+    if (mockHistory.length > 0) {
+      // Avoid exact duplicates if they somehow exist in both
+      mockHistory.forEach(mockItem => {
+        const isDuplicate = history.some(dbItem => {
+          const mockDate = new Date(mockItem.date).getTime();
+          const dbDate = new Date(dbItem.date).getTime();
+          return Math.abs(mockDate - dbDate) < 1000; // 1 second tolerance
+        });
+        if (!isDuplicate) {
+          history.push(mockItem);
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Mock History Merge Error:", err);
+  }
+
+  // 3. Sort merged history by date descending
+  history.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  res.json({ history });
 });
 
 // POST /chat
@@ -203,6 +236,8 @@ app.post('/chat', (req, res) => {
     res.json({ response });
   }, 1000);
 });
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.listen(PORT, () => {
   console.log(`Backend Server running on port ${PORT}`);

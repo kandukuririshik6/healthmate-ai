@@ -1,4 +1,6 @@
-const API_URL = 'https://healthmate-ai-k0wv.onrender.com';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000' 
+    : window.location.origin;
 const STANDALONE_MODE = false; // Set to true to bypass backend and use LocalStorage/Client-side logic only
 
 // Helper to generate a unique, deterministic ID from email
@@ -465,13 +467,32 @@ async function loadDashboard() {
         const res = await fetch(`${API_URL}/history?userId=${userId}`);
         const result = await res.json();
 
-        const tbody = document.getElementById('historyTableBody');
-
+        // Get local history for merging
+        let localHistory = JSON.parse(localStorage.getItem('healthmate_history_' + user.email) || '[]');
+        
+        // Merge histories and remove duplicates based on a combination of date and risk level
+        let combinedHistory = [];
         if (result.history) {
-            renderDashboardData(result.history);
-        } else {
-            renderDashboardData([]);
+            combinedHistory = [...result.history];
         }
+        
+        // Add local items that aren't already in the server history
+        localHistory.forEach(localItem => {
+            const isDuplicate = combinedHistory.some(serverItem => {
+                const localDate = new Date(localItem.date).getTime();
+                const serverDate = new Date(serverItem.date).getTime();
+                // If dates are within 1 minute of each other, consider them potentially same
+                return Math.abs(localDate - serverDate) < 60000;
+            });
+            if (!isDuplicate) {
+                combinedHistory.push(localItem);
+            }
+        });
+
+        // Sort descending
+        combinedHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        renderDashboardData(combinedHistory);
 
     } catch (err) {
         console.warn("Dashboard API error, using local fallback:", err);
@@ -1615,25 +1636,28 @@ function renderDashboardData(history) {
         tbody.innerHTML = '';
         
         // Show Latest Risk Badge
-        updateDashboardRiskBadge(history[0].risk_level);
+        const latestRisk = history[0].risk_level || history[0].riskLevel;
+        updateDashboardRiskBadge(latestRisk);
 
         const activityData = [];
         const sleepData = [];
 
-        // Show last 7 assessments in table, and reverse them for chronological chart
-        const recentHistory = history.slice(0, 7);
+        // Use different limits for table and charts
+        const tableHistory = history.slice(0, 20); // Show up to 20 recent records in the table
+        const chartHistory = history.slice(0, 7);  // Keep charts to last 7 for trend clarity
         
-        recentHistory.forEach(item => {
+        tableHistory.forEach(item => {
             const tr = document.createElement('tr');
             const date = new Date(item.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
             
+            const currentRisk = item.risk_level || item.riskLevel;
             let riskClass = "badge-low";
-            if (item.risk_level === 'Moderate Risk') riskClass = "badge-moderate";
-            if (item.risk_level === 'High Risk') riskClass = "badge-high";
+            if (currentRisk === 'Moderate Risk') riskClass = "badge-moderate";
+            if (currentRisk === 'High Risk') riskClass = "badge-high";
 
             tr.innerHTML = `
                 <td>${date}</td>
-                <td><span class="badge ${riskClass}">${item.risk_level}</span></td>
+                <td><span class="badge ${riskClass}">${currentRisk}</span></td>
                 <td>${item.sleep_hours} h</td>
                 <td>${item.exercise_minutes} m</td>
                 <td>${item.stress_level} / 10</td>
@@ -1646,7 +1670,7 @@ function renderDashboardData(history) {
         const sleepLabels = [];
 
         // Charts should be chronological (Oldest to Newest)
-        recentHistory.reverse().forEach(item => {
+        chartHistory.reverse().forEach(item => {
             const dateObj = new Date(item.date);
             const shortDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
             activityData.push(item.exercise_minutes);
