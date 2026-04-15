@@ -125,113 +125,185 @@ function generateAdvice(riskLevel, assessmentData) {
   return { explanation, recommendations };
 }
 
+// --- Enhanced Chatbot Logic: Fully Trained HealthMate AI ---
+
+// Simple Levenshtein Distance for fuzzy matching
+function getLevenshteinDistance(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+function isFuzzyMatch(query, keyword) {
+  query = query.toLowerCase().trim();
+  keyword = keyword.toLowerCase().trim();
+  if (query.includes(keyword)) return true;
+  const distance = getLevenshteinDistance(query, keyword);
+  const tolerance = keyword.length > 5 ? 2 : 1;
+  return distance <= tolerance;
+}
+
 function generateChatResponse(message) {
-  const lowerMsg = message.toLowerCase();
+  const lowerMsg = message.toLowerCase().trim();
+  const words = lowerMsg.split(/\s+/);
   
-  // Define Intent-Response Mapping
+  // Intent-Response Mapping covering Global Health & Website features
   const intents = [
     {
-      keywords: ["hello", "hi", "hey", "greetings"],
+      keywords: ["hello", "hi", "hey", "greetings", "good morning", "good evening"],
       responses: [
-        "Hello! I am HealthMate AI, your personal wellness companion. How are you feeling today?",
-        "Hi there! I'm here to help you with any health or lifestyle questions. What's on your mind?",
-        "Greetings! I'm HealthMate AI. Ready to work on your health goals together?"
+        "Welcome to HealthMate AI! I am your personal health companion. How can I help you achieve your wellness goals today?",
+        "Hi! I'm here to support your journey toward a healthier lifestyle. What questions do you have for me today?",
+        "Greetings! Ready to work on your vitality? I'm here for diet, exercise, or mental wellness tips!"
       ]
     },
     {
-      keywords: ["headache", "migraine"],
+      keywords: ["headache", "migraine", "head pain"],
       responses: [
-        "I'm sorry to hear you have a headache. It's often caused by dehydration, stress, or lack of sleep. Try drinking some water and resting in a quiet, dark room. if it's severe or persistent, please consult a professional.",
-        "Headaches can be really tough. Have you been getting enough water today? Sometimes a quick break from screens can also help. Take care of yourself!"
+        "Headaches are often signals of dehydration, stress, or poor posture. Try a large glass of water and some deep breathing in a dark room. If it's chronic or severe, please see a healthcare provider.",
+        "I'm sorry you have a headache. Have you been staring at screens for a long time? A 10-minute digital break and some gentle neck stretches might help."
       ]
     },
     {
-      keywords: ["fever", "temperature", "chills"],
+      keywords: ["assessment", "test", "measure", "predict", "checkup", "how to use", "start"],
       responses: [
-        "A fever is usually your body's way of fighting off an infection. Please make sure to stay hydrated and get plenty of rest. If your temperature goes above 103°F (39.4°C), seek medical attention immediately.",
-        "I'm concerned to hear about your fever. It's important to monitor it closely. Rest and fluids are key right now. Do you have any other symptoms like a cough or body aches?"
+        "Our Health Assessment uses advanced ML patterns to predict potential risks based on your habits. Just head to the 'Assessment' page to get your personalized report!",
+        "To get started, take our Health Assessment! It analyzes your sleep, diet, and water intake to give you actionable advice for a healthier future.",
+        "The Assessment tool is the heart of HealthMate AI. It helps identify 'Serious case' vs 'Low case' risks so you can take proactive steps today."
       ]
     },
     {
-      keywords: ["cough", "cold", "flu", "sore throat"],
+      keywords: ["dashboard", "stats", "history", "tracking", "progress"],
       responses: [
-        "Coughs and colds are very common. Warm fluids, honey, and plenty of rest can help soothe your symptoms. If you experience difficulty breathing, please see a doctor right away.",
-        "That sounds uncomfortable. Make sure you're keeping warm and resting. Saltwater gargles can sometimes help with a sore throat. I hope you feel better soon!"
+        "Once you take an assessment, your 'Dashboard' will show your health history and risk trends. It's a great way to see how your lifestyle changes are paying off!",
+        "The Dashboard is where you can monitor your progress over time. It stores your past assessments so you can track improvements in your sleep and hydration habits."
       ]
     },
     {
-      keywords: ["sleep", "insomnia", "tired", "fatigue"],
+      keywords: ["tips", "advice", "science", "read", "articles"],
       responses: [
-        "Consistent sleep is vital for health! Try to aim for 7-9 hours. A regular wind-down routine—like reading or light stretching instead of scrolling—can really improve your sleep quality.",
-        "Feeling tired? Your body might be asking for more rest or better hydration. Creating a dark, cool environment for sleep often helps. How many hours did you manage to get last night?"
+        "Looking for more knowledge? Check out our 'Health Tips' section! We have science-backed advice on everything from superfoods to advanced sleep hygiene.",
+        "The Tips page is a great resource for learning about longevity and hormonal health. It’s perfect for picking up new healthy habits."
       ]
     },
     {
-      keywords: ["diet", "food", "nutrition", "eating", "weight"],
+      keywords: ["diet", "food", "nutrition", "eating", "superfood", "carbs", "protein", "keto", "balanced"],
       responses: [
-        "Nutrition is the foundation of health. Focus on whole foods like colorful vegetables, lean proteins, and healthy fats. Small, consistent changes in your diet can lead to big improvements in how you feel!",
-        "A balanced diet is key. Try to minimize processed sugars and stay hydrated. Have you tried the 'Tips' section on our platform? It has some great nutritional advice!"
+        "A 'Rainbow Plate' is the secret to longevity! Try to include 5 colors of vegetables, lean proteins, and whole grains. Healthy fats from olive oil and avocados are also vital.",
+        "Focus on nutrient density. Superfoods like blueberries, salmon, spinach, and quinoa provide massive benefits for your heart and brain.",
+        "Balanced nutrition means avoiding hidden sugars and processed oils. Try cooking at home more often to control your ingredients for better metabolic health!"
       ]
     },
     {
-      keywords: ["exercise", "workout", "fitness", "active", "running", "gym"],
+      keywords: ["exercise", "workout", "fitness", "gym", "cardio", "strength", "weights", "yoga", "swimming"],
       responses: [
-        "Movement is medicine! Even a 20-minute brisk walk daily has incredible benefits for your heart and mood. What kind of activities do you usually enjoy?",
-        "Regular physical activity is one of the best things you can do for your health. Aim for about 150 minutes of moderate activity per week. You've got this!"
+        "For heart health, cardio is king! Aim for 150 minutes of moderate activity per week. Even a brisk walk daily makes a huge difference.",
+        "Strength training builds muscle, which boosts your metabolism. Try bodyweight exercises like squats and planks if you're a beginner. What level of fitness are you currently at?",
+        "Flexibility is often overlooked. Yoga or daily stretching improves circulation and prevents muscle stiffness as we age. It's the perfect way to finish a workout."
       ]
     },
     {
-      keywords: ["stress", "anxiety", "overwhelmed", "mental"],
+      keywords: ["habit", "routine", "morning", "night", "posture", "screen", "digital detox"],
       responses: [
-        "I'm sorry you're feeling stressed. Mental well-being is just as important as physical health. Deep breathing exercises or a short walk in nature can sometimes help lower cortisol levels.",
-        "It's okay to feel overwhelmed sometimes. Please remember to be kind to yourself. Have you tried meditation or talking to someone you trust? Your mental health matters deeply."
+        "The 'First Hour' rule is life-changing: hydrate, move for 5 minutes, and breathe deeply before checking any screens in the morning.",
+        "Digital health is real health! Try to stop using screens 30 minutes before sleep to allow your brain to produce melatonin naturally.",
+        "Check your posture right now! Are your shoulders back and spine straight? Good posture prevents back pain and even improves your confidence and breathing."
       ]
     },
     {
-      keywords: ["water", "hydration", "drink"],
+      keywords: ["sleep", "insomnia", "tired", "fatigue", "rest", "circadian"],
       responses: [
-        "Hydration is crucial! Aim for about 8-10 cups of water a day. It helps with energy, skin health, and even digestion. Keep a water bottle nearby as a reminder!",
-        "Are you drinking enough water? It's the simplest way to boost your vitality. Try adding a slice of lemon or cucumber if you want some variety!"
+        "Sleep is the foundation of all health. Try to keep your room temperature around 65°F (18°C) for deep, restorative sleep cycles. Aim for consistent wake-times every day.",
+        "Feeling tired? It might be 'Social Jetlag' from inconsistent sleep schedules. Try grounding yourself in morning sunlight for 5 minutes to reset your circadian rhythm.",
+        "Avoid caffeine after 2 PM to ensure it doesn't interfere with your deep sleep. Quality of sleep is just as important as the quantity!"
       ]
     },
     {
-      keywords: ["thank", "thanks", "appreciate"],
+      keywords: ["stress", "anxiety", "mindful", "mental", "meditation", "breathing"],
       responses: [
-        "You're very welcome! I'm always here to support your health journey.",
-        "Happy to help! Is there anything else you'd like to talk about?",
-        "No problem at all! Stay healthy and take care."
+        "Mental health is physical health. Try '4-7-8' breathing: Inhale for 4, hold for 7, exhale for 8. It instantly calms your nervous system.",
+        "If you're feeling overwhelmed, try a 'Mindful Walk'. Focus entirely on the sensation of your feet hitting the ground and the sounds around you. It lowers cortisol levels fast.",
+        "Remember to be kind to yourself. High stress is a major risk factor for many diseases. Take 5 minutes today just for you—no phone, no work, just peace."
+      ]
+    },
+    {
+      keywords: ["water", "hydration", "thirst", "drink"],
+      responses: [
+        "Hydration is the easiest health win! Your cells need water for energy. Carry a reusable bottle and aim for 8-12 cups a day depending on your activity level.",
+        "If you feel hungry, try drinking a glass of water first. Often, our bodies confuse thirst with hunger. Hydrated skin also stays youthful longer!"
+      ]
+    },
+    {
+      keywords: ["thank", "thanks", "helpful", "appreciate"],
+      responses: [
+        "You are most welcome! I'm here whenever you need health advice. Stay healthy!",
+        "Happy to help! Keep making those small, positive changes—they really add up over time.",
+        "My pleasure! Is there anything else about your health or our website you'd like to explore?"
       ]
     },
     {
       keywords: ["bye", "goodbye", "see you"],
       responses: [
-        "Goodbye! Take care of yourself and see you soon.",
-        "Have a wonderful, healthy day! Come back anytime you have questions.",
-        "Farewell! Remember, small steps lead to big health changes. See you!"
+        "Goodbye! Take care of yourself and remember: your health is your greatest wealth.",
+        "Farewell! Wishing you a vibrant and energetic day. Come back anytime!",
+        "Bye for now! Stay active, stay hydrated, and stay healthy."
       ]
     },
     {
-      keywords: ["help", "what can you do", "features", "how to use"],
+      keywords: ["help", "what can you do", "features", "how to", "who are you"],
       responses: [
-        "I can help you understand symptoms, provide lifestyle tips, or guide you through the Health Assessment. Speaking of which—have you taken your personalized assessment yet? It's a great way to see where you stand!",
-        "I'm your HealthMate assistant! You can ask me about diet, sleep, stress, or specific symptoms. For a deeper look, check out our Assessment and Dashboard pages."
+        "I am HealthMate AI! I can provide professional health advice on diet, sleep, and exercise. I can also help you use our Assessment Tool, view your Dashboard, or find Tips.",
+        "I'm here to guide you toward better health. You can ask me medical questions, lifestyle tips, or how to navigate our platform. What's your top health goal right now?"
       ]
     }
   ];
 
-  // Match Intent
+  // Match Intent with Robustness
+  let bestIntent = null;
+  let highestScore = 0;
+
   for (const intent of intents) {
-    if (intent.keywords.some(k => lowerMsg.includes(k))) {
-      const randomIndex = Math.floor(Math.random() * intent.responses.length);
-      return intent.responses[randomIndex];
+    let score = 0;
+    for (const keyword of intent.keywords) {
+      if (lowerMsg.includes(keyword)) {
+        score += 2; 
+      } else {
+        for (const word of words) {
+          if (word.length > 3 && isFuzzyMatch(word, keyword)) {
+            score += 1;
+          }
+        }
+      }
     }
+    
+    if (score > highestScore) {
+      highestScore = score;
+      bestIntent = intent;
+    }
+  }
+
+  if (bestIntent && highestScore > 0) {
+    const randomIndex = Math.floor(Math.random() * bestIntent.responses.length);
+    return bestIntent.responses[randomIndex];
   }
 
   // Fallback Response
   const fallbacks = [
-    "That's a great question! While I'm still learning, I recommend taking our personalized Health Assessment to get a detailed risk profile based on your unique habits.",
-    "Interesting! I'm continuously expanding my health knowledge. In the meantime, have you checked the 'Health Tips' page for some science-backed wellness advice?",
-    "I'm not quite sure about that one yet, but I'm here to support your general wellness! Try asking me about sleep, diet, or stress management."
+    "That's a great question! While I'm still learning more about every health aspect, I suggest using our 'Health Assessment' tool to get a detailed profile of your own risks.",
+    "I'm continuously expanding my knowledge! For now, try asking me about diet, exercise, habits, or how to use our Dashboard.",
+    "Interesting point! To give you the best advice, have you completed your health assessment yet? It’s the best way for me to understand your unique needs."
   ];
   return fallbacks[Math.floor(Math.random() * fallbacks.length)];
 }
